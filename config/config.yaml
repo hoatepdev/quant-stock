@@ -1,0 +1,180 @@
+# Vietnam Quant Platform Configuration
+
+# Market Configuration
+market:
+  exchanges:
+    - HOSE
+    - HNX
+    - UPCOM
+
+  trading_hours:
+    start: "09:00"
+    end: "15:00"
+    timezone: "Asia/Ho_Chi_Minh"
+
+  price_limits:
+    daily_limit_pct: 7.0  # Vietnam's ±7% daily price limit
+
+  settlement:
+    period_days: 2  # T+2 settlement
+
+# Data Configuration
+data:
+  source: "vnstock"  # Options: "vnstock" (default, free, no API key) or "ssi"
+
+  backfill:
+    default_start_date: "2020-01-01"
+    batch_size: 10
+    max_retries: 3
+    retry_delay_seconds: 5
+
+  update:
+    schedule: "0 18 * * 1-5"  # 6 PM on weekdays
+    timeout_minutes: 30
+
+  quality_checks:
+    enabled: true
+    check_missing_data: true
+    check_outliers: true
+    outlier_threshold_std: 3.0
+
+# Factor Configuration
+factors:
+  # List of factors to calculate
+  fundamental:
+    - pe_ratio
+    - pb_ratio
+    - ps_ratio
+    - roe
+    - roa
+    - roi
+    - debt_to_equity
+    - current_ratio
+    - revenue_growth_yoy
+    - eps_growth_yoy
+
+  technical:
+    - rsi_14
+    - macd
+    - sma_20
+    - sma_50
+    - volume_ma_ratio
+    - distance_52w_high
+
+  momentum:
+    - momentum_1m
+    - momentum_3m
+    - momentum_6m
+    - momentum_12m
+
+  # Calculation parameters
+  parameters:
+    rsi_period: 14
+    macd_fast: 12
+    macd_slow: 26
+    macd_signal: 9
+    bollinger_period: 20
+    bollinger_std: 2.0
+
+# API Configuration
+api:
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 1000
+    burst_size: 100
+
+  pagination:
+    default_limit: 50
+    max_limit: 500
+
+  cache:
+    enabled: true
+    default_ttl: 300
+    price_data_ttl: 3600
+    factor_data_ttl: 1800
+
+# Logging Configuration
+logging:
+  level: INFO
+  format: json  # or 'text'
+
+  handlers:
+    console:
+      enabled: true
+      level: INFO
+
+    file:
+      enabled: true
+      level: DEBUG
+      path: logs/app.log
+      max_bytes: 10485760  # 10MB
+      backup_count: 5
+
+    error_file:
+      enabled: true
+      level: ERROR
+      path: logs/error.log
+      max_bytes: 10485760
+      backup_count: 5
+
+# Corporate Actions
+corporate_actions:
+  detection:
+    enabled: true
+    split_threshold_pct: 30.0
+    volume_spike_threshold: 2.0
+
+  verification:
+    manual_review_required: true
+    auto_apply_verified: true
+
+# Database Configuration
+database:
+  pool:
+    size: 10
+    max_overflow: 20
+    timeout: 30
+    recycle: 3600
+
+  timescaledb:
+    chunk_time_interval: "1 month"
+    compression_enabled: true
+    compression_after: "3 months"
+
+# External APIs
+external_apis:
+  ssi:
+    base_url: "https://iboard.ssi.com.vn/dchart/api"
+    rate_limit_requests: 100
+    rate_limit_period: 60
+    timeout: 30
+    retry_attempts: 3
+
+  vndirect:
+    base_url: "https://finfo-api.vndirect.com.vn"
+    rate_limit_requests: 200
+    rate_limit_period: 60
+    timeout: 30
+
+# Vietnam Market Holidays (2024)
+# TODO: Update annually or implement dynamic holiday API
+holidays:
+  - "2024-01-01"  # New Year
+  - "2024-02-08"  # Lunar New Year Eve
+  - "2024-02-09"  # Lunar New Year
+  - "2024-02-10"  # Lunar New Year
+  - "2024-02-11"  # Lunar New Year
+  - "2024-02-12"  # Lunar New Year
+  - "2024-04-18"  # Hung Kings' Festival
+  - "2024-04-30"  # Reunification Day
+  - "2024-05-01"  # Labor Day
+  - "2024-09-02"  # National Day
+  - "2024-09-03"  # National Day
+
+# Feature Flags
+features:
+  backtesting: false  # Coming in Phase 2
+  portfolio_optimization: false  # Coming in Phase 2
+  ml_predictions: false  # Coming in Phase 3
+  real_time_data: false  # Coming in Phase 2
+  sentiment_analysis: false  # Coming in Phase 3
