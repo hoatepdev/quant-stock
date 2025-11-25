@@ -150,11 +150,12 @@ external_apis:
     timeout: 30
     retry_attempts: 3
 
-  vndirect:
-    base_url: "https://finfo-api.vndirect.com.vn"
+  dnse:
+    base_url: "https://services.entrade.com.vn"
     rate_limit_requests: 200
     rate_limit_period: 60
     timeout: 30
+    retry_attempts: 3
 
 # Vietnam Market Holidays (2024)
 # TODO: Update annually or implement dynamic holiday API

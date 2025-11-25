@@ -33,7 +33,8 @@ class Settings(BaseSettings):
     # API Keys
     SSI_API_KEY: str = Field(default="")
     SSI_SECRET_KEY: str = Field(default="")
-    VNDIRECT_API_KEY: str = Field(default="")
+    DNSE_API_KEY: str = Field(default="")
+    DNSE_SECRET_KEY: str = Field(default="")
 
     # Application Configuration
     ENVIRONMENT: str = Field(default="development")

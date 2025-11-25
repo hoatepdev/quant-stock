@@ -8,11 +8,11 @@ logger = get_logger(__name__)
 settings = get_settings()
 
 
-def get_data_client() -> Union["VNStockClient", "SSIClient"]:  # type: ignore
+def get_data_client() -> Union["VNStockClient", "SSIClient", "DNSEClient"]:  # type: ignore
     """Get data client based on configuration.
 
     Returns:
-        Data client instance (VNStockClient or SSIClient)
+        Data client instance (VNStockClient, SSIClient, or DNSEClient)
     """
     data_source = settings.DATA_SOURCE.lower()
 
@@ -26,6 +26,11 @@ def get_data_client() -> Union["VNStockClient", "SSIClient"]:  # type: ignore
 
         logger.info("Using SSI as data source")
         return SSIClient()
+    elif data_source == "dnse":
+        from src.core.data_ingestion.dnse_client import DNSEClient
+
+        logger.info("Using DNSE as data source")
+        return DNSEClient()
     else:
         logger.warning(
             f"Unknown data source '{data_source}', falling back to VNStock (default)"

@@ -9,37 +9,43 @@ A **production-ready** quantitative investment research and trading platform for
 ### ✅ Complete MVP Features
 
 1. **Data Infrastructure**
-   - SSI API client with rate limiting and caching
+
+   - SSI/DNSE/vnstock API client with rate limiting and caching
    - PostgreSQL + TimescaleDB for time-series optimization
    - Redis caching layer
    - Automated data validation
 
 2. **Factor Calculation Engines**
+
    - **Fundamental Factors**: 20+ ratios (P/E, P/B, ROE, ROA, etc.)
    - **Technical Indicators**: 15+ indicators (RSI, MACD, Bollinger Bands, etc.)
    - **Momentum Factors**: 10+ metrics (returns, relative strength, etc.)
 
 3. **Corporate Actions System**
+
    - Automatic detection of splits and reverse splits
    - Price adjustment engine
    - Manual verification workflow
 
 4. **Stock Screening API**
+
    - Multi-factor filtering
    - Flexible sorting and pagination
    - Real-time factor queries
    - RESTful API with OpenAPI documentation
 
 5. **Database Schema**
+
    - 9 core tables with proper relationships
    - TimescaleDB hypertables for performance
    - Comprehensive indexes
    - Data quality logging
 
 6. **Testing Framework**
+
    - Unit tests for core calculations
    - Integration test structure
-   - >80% coverage target
+   - > 80% coverage target
 
 7. **Docker Deployment**
    - Multi-container setup
@@ -113,27 +119,32 @@ vnquant/
 ## Technology Stack
 
 ### Backend
+
 - **Python 3.10+**: Modern Python features
 - **FastAPI**: High-performance async web framework
 - **SQLAlchemy 2.0**: Modern ORM with type hints
 - **Pydantic v2**: Data validation
 
 ### Database
+
 - **PostgreSQL 14**: Robust relational database
 - **TimescaleDB**: Time-series optimization
 - **Redis**: Caching and session storage
 
 ### Data Processing
+
 - **pandas**: Data manipulation
 - **numpy**: Numerical computations
 - **pandas-ta**: Technical analysis indicators
 
 ### Infrastructure
+
 - **Docker**: Containerization
 - **Docker Compose**: Multi-container orchestration
 - **Uvicorn**: ASGI server
 
 ### Development
+
 - **pytest**: Testing framework
 - **black**: Code formatting
 - **mypy**: Type checking
@@ -142,12 +153,15 @@ vnquant/
 ## API Endpoints
 
 ### Stock Screening
+
 ```
 POST /api/v1/screen
 ```
+
 Screen stocks with multiple filter criteria
 
 ### Factor Data
+
 ```
 GET /api/v1/factors/{ticker}
 GET /api/v1/factors/{ticker}/history
@@ -155,11 +169,13 @@ GET /api/v1/factors/available
 ```
 
 ### Stock Information
+
 ```
 GET /api/v1/tickers
 ```
 
 ### Health & Monitoring
+
 ```
 GET /api/v1/health
 GET /api/v1/ready
@@ -179,6 +195,7 @@ GET /api/v1/ready
 ## Key Features
 
 ### Vietnam Market Specifics
+
 - ±7% daily price limits handling
 - T+2 settlement tracking
 - Foreign ownership limits
@@ -186,6 +203,7 @@ GET /api/v1/ready
 - Three exchange support (HOSE, HNX, UPCoM)
 
 ### Performance Optimizations
+
 - TimescaleDB hypertables for time-series
 - Redis caching with configurable TTL
 - Database connection pooling
@@ -193,6 +211,7 @@ GET /api/v1/ready
 - Async I/O throughout
 
 ### Data Quality
+
 - Automatic outlier detection
 - OHLC validation
 - Missing data handling
@@ -200,6 +219,7 @@ GET /api/v1/ready
 - Comprehensive logging
 
 ### Security
+
 - Rate limiting
 - Input validation
 - SQL injection prevention
@@ -209,6 +229,7 @@ GET /api/v1/ready
 ## Getting Started
 
 ### Quick Start (10 minutes)
+
 ```bash
 # 1. Configure
 cp .env.example .env
@@ -225,11 +246,13 @@ curl http://localhost:8000/api/v1/health
 ```
 
 ### Full Setup
+
 See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 
 ## What's Included
 
 ### ✅ Production Ready
+
 - Docker deployment
 - Database migrations
 - Health checks
@@ -239,6 +262,7 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 - Documentation
 
 ### ✅ Development Tools
+
 - Makefile for common tasks
 - Pre-commit hooks setup
 - Test framework
@@ -246,6 +270,7 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 - Linting configuration
 
 ### ✅ Documentation
+
 - README with feature overview
 - SETUP guide with troubleshooting
 - QUICKSTART for immediate use
@@ -255,6 +280,7 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 ## Next Steps & Roadmap
 
 ### Immediate (You Can Do Now)
+
 1. Add your SSI API credentials to `.env`
 2. Start the platform with `make docker-up`
 3. Initialize database with `make init-db`
@@ -262,14 +288,16 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 5. Explore API at http://localhost:8000/docs
 
 ### Phase 2 (1-2 months)
+
 - Implement backfill_data.py script
-- Add VNDirect client
+- Add DNSE client and vnstock
 - Corporate action adjuster
 - Market index tracking
 - Backtesting framework
 - Portfolio optimization
 
 ### Phase 3 (3-6 months)
+
 - Machine learning models
 - Sentiment analysis
 - Real-time data feeds
@@ -277,6 +305,7 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 - Performance analytics
 
 ### Phase 4 (6-12 months)
+
 - Trading integration
 - Risk management
 - Client portal
@@ -301,11 +330,13 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 ## Required Environment Variables
 
 ### Critical (Must Set)
+
 - `SSI_API_KEY`: Your SSI API key
 - `SSI_SECRET_KEY`: Your SSI secret
 - `DB_PASSWORD`: Database password
 
 ### Optional (Have Defaults)
+
 - `ENVIRONMENT`: development/production
 - `LOG_LEVEL`: INFO/DEBUG/WARNING
 - `API_PORT`: 8000
@@ -314,18 +345,21 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 ## Architecture Highlights
 
 ### Layered Architecture
+
 1. **API Layer**: FastAPI routes and request handling
 2. **Business Logic Layer**: Factor calculations, screening
 3. **Data Access Layer**: SQLAlchemy models and queries
 4. **Infrastructure Layer**: Database, cache, external APIs
 
 ### Design Patterns
+
 - Repository pattern for data access
 - Factory pattern for factor calculations
 - Strategy pattern for screening
 - Dependency injection throughout
 
 ### Scalability
+
 - Stateless API servers (horizontal scaling)
 - Database read replicas support
 - Redis cluster support
@@ -334,13 +368,15 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 ## Known Limitations & TODOs
 
 ### TODO - High Priority
+
 1. Implement `backfill_data.py` script
-2. Add VNDirect API client
+2. Add DNSE API client
 3. Complete corporate action adjuster
 4. Implement daily update script
 5. Add more integration tests
 
 ### TODO - Medium Priority
+
 1. Add authentication/authorization
 2. Implement rate limiting per user
 3. Add API versioning strategy
@@ -348,6 +384,7 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 5. Set up monitoring (Prometheus/Grafana)
 
 ### TODO - Low Priority
+
 1. WebSocket support for real-time data
 2. GraphQL API alternative
 3. Mobile SDK
@@ -356,12 +393,14 @@ See [QUICKSTART.md](QUICKSTART.md) for detailed instructions.
 ## Support & Resources
 
 ### Documentation
+
 - [README.md](README.md) - Feature overview
 - [QUICKSTART.md](QUICKSTART.md) - Get started in 10 minutes
 - [docs/SETUP.md](docs/SETUP.md) - Detailed setup
 - API Docs: http://localhost:8000/docs
 
 ### Commands Reference
+
 ```bash
 make help           # Show all commands
 make docker-up      # Start services
@@ -372,6 +411,7 @@ make lint           # Check code quality
 ```
 
 ### Troubleshooting
+
 1. Check logs: `make docker-logs`
 2. Verify services: `make docker-ps`
 3. Check health: `curl http://localhost:8000/api/v1/health`
@@ -380,6 +420,7 @@ make lint           # Check code quality
 ## Success Metrics
 
 This MVP provides:
+
 - ✅ Complete data infrastructure
 - ✅ 50+ investment factors
 - ✅ Production-ready API
