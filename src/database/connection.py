@@ -4,7 +4,7 @@ from typing import AsyncGenerator, Generator
 from sqlalchemy import create_engine, event
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy.pool import NullPool, QueuePool
+from sqlalchemy.pool import AsyncAdaptedQueuePool, NullPool, QueuePool
 
 from src.utils.config import get_settings
 
@@ -24,7 +24,7 @@ sync_engine = create_engine(
 async_database_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 async_engine = create_async_engine(
     async_database_url,
-    poolclass=NullPool if settings.ENVIRONMENT == "test" else QueuePool,
+    poolclass=NullPool if settings.ENVIRONMENT == "test" else AsyncAdaptedQueuePool,
     pool_size=10,
     max_overflow=20,
     pool_pre_ping=True,

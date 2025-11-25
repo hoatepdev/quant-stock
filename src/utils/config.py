@@ -1,6 +1,6 @@
 """Configuration management using pydantic-settings."""
 from functools import lru_cache
-from typing import List
+from typing import List, Union
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -62,14 +62,14 @@ class Settings(BaseSettings):
     FACTOR_CACHE_TTL: int = Field(default=1800)
 
     # Market Configuration
-    VIETNAM_EXCHANGES: List[str] = Field(default=["HOSE", "HNX", "UPCOM"])
+    VIETNAM_EXCHANGES: Union[str, List[str]] = Field(default="HOSE,HNX,UPCOM")
     DEFAULT_EXCHANGE: str = Field(default="HOSE")
     TRADING_HOURS_START: str = Field(default="09:00")
     TRADING_HOURS_END: str = Field(default="15:00")
 
     # Security
     API_SECRET_KEY: str = Field(default="your_secret_key_here")
-    ALLOWED_ORIGINS: List[str] = Field(default=["http://localhost:3000"])
+    ALLOWED_ORIGINS: Union[str, List[str]] = Field(default="http://localhost:3000")
 
     @field_validator("DATABASE_URL", mode="before")
     @classmethod
@@ -97,18 +97,18 @@ class Settings(BaseSettings):
 
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
-    def parse_allowed_origins(cls, v: str | List[str]) -> List[str]:
+    def parse_allowed_origins(cls, v: Union[str, List[str]]) -> List[str]:
         """Parse ALLOWED_ORIGINS from comma-separated string or list."""
         if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",")]
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
         return v
 
     @field_validator("VIETNAM_EXCHANGES", mode="before")
     @classmethod
-    def parse_exchanges(cls, v: str | List[str]) -> List[str]:
+    def parse_exchanges(cls, v: Union[str, List[str]]) -> List[str]:
         """Parse VIETNAM_EXCHANGES from comma-separated string or list."""
         if isinstance(v, str):
-            return [exchange.strip() for exchange in v.split(",")]
+            return [exchange.strip() for exchange in v.split(",") if exchange.strip()]
         return v
 
 
