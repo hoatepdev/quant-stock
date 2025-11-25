@@ -1,5 +1,5 @@
 """Health check endpoints."""
-from datetime import datetime
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
@@ -31,7 +31,7 @@ async def health_check(db: Session = Depends(get_sync_session)) -> dict:
 
     return {
         "status": "healthy" if db_status == "healthy" else "unhealthy",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "environment": settings.ENVIRONMENT,
         "database": db_status,
     }
@@ -46,5 +46,5 @@ async def readiness_check() -> dict:
     """
     return {
         "status": "ready",
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
     }

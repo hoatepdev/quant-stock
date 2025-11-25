@@ -1,5 +1,5 @@
 """SQLAlchemy models for Vietnam Quant Platform."""
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from decimal import Decimal
 from typing import Optional
 
@@ -17,6 +17,7 @@ from sqlalchemy import (
     String,
     Text,
     UniqueConstraint,
+    func,
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -48,10 +49,10 @@ class StockInfo(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     delisting_date: Mapped[Optional[date]] = mapped_column(Date)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
 
     __table_args__ = (
@@ -80,7 +81,7 @@ class DailyPrice(Base):
         Numeric(10, 6), default=1.0, nullable=False
     )
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
     __table_args__ = (
@@ -144,10 +145,10 @@ class FinancialStatement(Base):
     free_cash_flow: Mapped[Optional[Decimal]] = mapped_column(Numeric(20, 2))
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
 
     __table_args__ = (
@@ -210,7 +211,7 @@ class FinancialRatio(Base):
     book_value_growth_yoy: Mapped[Optional[float]] = mapped_column(Float)
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
     __table_args__ = (
@@ -252,7 +253,7 @@ class CorporateAction(Base):
         Enum("AUTOMATIC", "MANUAL", "API", name="detection_method_enum")
     )
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
     applied_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
 
@@ -277,7 +278,7 @@ class Factor(Base):
     zscore: Mapped[Optional[float]] = mapped_column(Float)
     percentile: Mapped[Optional[float]] = mapped_column(Float)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
     __table_args__ = (
@@ -307,7 +308,7 @@ class MarketIndex(Base):
     volume: Mapped[int] = mapped_column(BigInteger, nullable=False)
     value: Mapped[Optional[Decimal]] = mapped_column(Numeric(20, 2))
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
     __table_args__ = (
@@ -324,7 +325,7 @@ class DataQualityLog(Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     check_date: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False
     )
     table_name: Mapped[str] = mapped_column(String(50), nullable=False)
     check_type: Mapped[str] = mapped_column(String(50), nullable=False)
