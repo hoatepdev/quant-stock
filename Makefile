@@ -20,6 +20,7 @@ help:
 	@echo "  make init-db          Initialize database schema"
 	@echo "  make load-stocks      Load stock list from data source"
 	@echo "  make backfill-data    Backfill historical data"
+	@echo "  make calc-ratios      Calculate financial ratios for all stocks"
 	@echo ""
 	@echo "Stock Screening:"
 	@echo "  make screen-value     Screen for value stocks"
@@ -52,6 +53,23 @@ load-stocks:
 
 backfill-data:
 	$(PYTHON) scripts/backfill_data.py
+
+calc-ratios:
+	@echo "Calculating financial ratios for all stocks (2s delay to avoid rate limits)..."
+	$(PYTHON) scripts/calculate_financial_ratios.py --delay=2.0
+
+calc-ratios-test:
+	@echo "Testing with 10 stocks..."
+	$(PYTHON) scripts/calculate_financial_ratios.py --limit=10 --delay=1.0
+
+calc-ratios-exchange:
+	@if [ -z "$(EXCHANGE)" ]; then \
+		echo "Usage: make calc-ratios-exchange EXCHANGE=HOSE"; \
+		echo "Valid exchanges: HOSE, HNX, UPCOM"; \
+	else \
+		echo "Calculating ratios for $(EXCHANGE) stocks (2s delay)..."; \
+		$(PYTHON) scripts/calculate_financial_ratios.py --exchange=$(EXCHANGE) --delay=2.0; \
+	fi
 
 screen-value:
 	$(PYTHON) scripts/screen_stocks.py strategy --strategy=value

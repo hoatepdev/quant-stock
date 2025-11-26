@@ -2,9 +2,10 @@
 from datetime import date, timedelta
 from typing import Dict, List, Optional
 
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from src.database.models import DailyPrice, Factor, FinancialRatio, StockInfo
+from src.database.models import DailyPrice, FinancialRatio, StockInfo
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -47,7 +48,7 @@ class AdvancedScreener:
         logger.info("Screening for value stocks")
 
         # Get latest date
-        latest_date = self.db.query(Factor.date).order_by(Factor.date.desc()).first()
+        latest_date = self.db.query(FinancialRatio.date).order_by(FinancialRatio.date.desc()).first()
 
         if not latest_date:
             return []
@@ -94,7 +95,7 @@ class AdvancedScreener:
         query += " ORDER BY fr.pe_ratio ASC LIMIT :limit"
         params["limit"] = limit
 
-        result = self.db.execute(query, params)
+        result = self.db.execute(text(query), params)
 
         stocks = []
         for row in result:
@@ -138,7 +139,7 @@ class AdvancedScreener:
         """
         logger.info("Screening for growth stocks")
 
-        latest_date = self.db.query(Factor.date).order_by(Factor.date.desc()).first()
+        latest_date = self.db.query(FinancialRatio.date).order_by(FinancialRatio.date.desc()).first()
 
         if not latest_date:
             return []
@@ -174,7 +175,7 @@ class AdvancedScreener:
         query += " ORDER BY fr.revenue_growth_yoy DESC LIMIT :limit"
         params["limit"] = limit
 
-        result = self.db.execute(query, params)
+        result = self.db.execute(text(query), params)
 
         stocks = []
         for row in result:
@@ -298,7 +299,7 @@ class AdvancedScreener:
         """
         logger.info("Screening for quality stocks")
 
-        latest_date = self.db.query(Factor.date).order_by(Factor.date.desc()).first()
+        latest_date = self.db.query(FinancialRatio.date).order_by(FinancialRatio.date.desc()).first()
 
         if not latest_date:
             return []
@@ -337,7 +338,7 @@ class AdvancedScreener:
         query += " ORDER BY fr.roe DESC LIMIT :limit"
         params["limit"] = limit
 
-        result = self.db.execute(query, params)
+        result = self.db.execute(text(query), params)
 
         stocks = []
         for row in result:
@@ -383,7 +384,7 @@ class AdvancedScreener:
         """
         logger.info("Screening for dividend stocks")
 
-        latest_date = self.db.query(Factor.date).order_by(Factor.date.desc()).first()
+        latest_date = self.db.query(FinancialRatio.date).order_by(FinancialRatio.date.desc()).first()
 
         if not latest_date:
             return []
@@ -419,7 +420,7 @@ class AdvancedScreener:
         query += " ORDER BY fr.dividend_yield DESC LIMIT :limit"
         params["limit"] = limit
 
-        result = self.db.execute(query, params)
+        result = self.db.execute(text(query), params)
 
         stocks = []
         for row in result:
