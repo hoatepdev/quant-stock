@@ -1,4 +1,4 @@
-.PHONY: help install install-dev init-db backfill-data run-api run-tests lint format docker-build docker-up docker-down clean
+.PHONY: help install install-dev init-db load-stocks backfill-data run-api run-tests lint format docker-build docker-up docker-down clean
 
 # Variables
 PYTHON := python3
@@ -18,7 +18,15 @@ help:
 	@echo ""
 	@echo "Database:"
 	@echo "  make init-db          Initialize database schema"
+	@echo "  make load-stocks      Load stock list from data source"
 	@echo "  make backfill-data    Backfill historical data"
+	@echo ""
+	@echo "Stock Screening:"
+	@echo "  make screen-value     Screen for value stocks"
+	@echo "  make screen-growth    Screen for growth stocks"
+	@echo "  make screen-quality   Screen for quality stocks"
+	@echo "  make screen-all       Run all screening strategies"
+	@echo "  make screen-stats     Show database statistics"
 	@echo ""
 	@echo "Docker:"
 	@echo "  make docker-build     Build Docker images"
@@ -39,8 +47,45 @@ install-dev:
 init-db:
 	$(PYTHON) scripts/init_db.py
 
+load-stocks:
+	$(PYTHON) scripts/load_stock_list.py
+
 backfill-data:
 	$(PYTHON) scripts/backfill_data.py
+
+screen-value:
+	$(PYTHON) scripts/screen_stocks.py strategy --strategy=value
+
+screen-growth:
+	$(PYTHON) scripts/screen_stocks.py strategy --strategy=growth
+
+screen-quality:
+	$(PYTHON) scripts/screen_stocks.py strategy --strategy=quality
+
+screen-momentum:
+	$(PYTHON) scripts/screen_stocks.py strategy --strategy=momentum
+
+screen-dividend:
+	$(PYTHON) scripts/screen_stocks.py strategy --strategy=dividend
+
+screen-all:
+	$(PYTHON) scripts/screen_stocks.py strategy --strategy=all
+
+screen-custom:
+	@echo "Usage: make screen-custom ARGS='--max-pe=15 --min-roe=15'"
+	@echo "Example filters: --max-pe, --min-roe, --min-revenue-growth, --max-debt-to-equity"
+	@echo "See: python scripts/screen_stocks.py custom --help"
+
+screen-stats:
+	$(PYTHON) scripts/screen_stocks.py stats
+
+screen-analyze:
+	@if [ -z "$(TICKER)" ]; then \
+		echo "Usage: make screen-analyze TICKER=VNM"; \
+		echo "Example: make screen-analyze TICKER=HPG"; \
+	else \
+		$(PYTHON) scripts/screen_stocks.py analyze --ticker=$(TICKER); \
+	fi
 
 run-api:
 	uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
@@ -98,4 +143,5 @@ test-integration:
 dev-setup: install-dev init-db
 	@echo "Development environment setup complete!"
 	@echo "Run 'make docker-up' to start services"
-	@echo "Run 'make backfill-data' to load initial data"
+	@echo "Run 'make load-stocks' to load stock list"
+	@echo "Run 'make backfill-data' to load historical data"

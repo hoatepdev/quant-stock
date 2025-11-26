@@ -93,3 +93,6 @@ docs/_build/
 # Temporary files
 temp/
 tmp/
+TREE.txt
+*_momentum.csv
+*.csv.bak

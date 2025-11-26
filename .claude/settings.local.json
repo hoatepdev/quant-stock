@@ -10,7 +10,16 @@
       "Bash(docker-compose:*)",
       "Bash(python3:*)",
       "Bash(source:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(make load-stocks:*)",
+      "Bash(pip3 install:*)",
+      "Bash(make install:*)",
+      "Bash(make backfill-data:*)",
+      "Bash(make help:*)",
+      "Bash(python scripts/screen_stocks.py:*)",
+      "Bash(tree:*)",
+      "Bash(rm:*)",
+      "Bash(cp:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

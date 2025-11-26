@@ -1,8 +1,8 @@
-# Vietnam Quant Platform - Project Summary
+# Vietnam Quant Platform - Architecture & Technical Documentation
 
 ## Overview
 
-A **production-ready** quantitative investment research and trading platform for the Vietnam stock market. Built with modern Python technologies and designed to analyze ~1,800 stocks across HOSE, HNX, and UPCoM exchanges.
+Technical architecture and implementation details of the VNQuant platform - a **production-ready** quantitative investment research and trading platform for the Vietnam stock market. Built with modern Python technologies and designed to analyze ~1,800 stocks across HOSE, HNX, and UPCoM exchanges.
 
 ## What Has Been Built
 

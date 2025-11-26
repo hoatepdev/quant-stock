@@ -336,15 +336,26 @@ class VNStockClient:
         try:
 
             def fetch_data() -> pd.DataFrame:
-                listing = self.vnstock.listing
+                # Create a stock object (symbol doesn't matter for listing)
+                stock = self.vnstock.stock("ACB")
+                listing = stock.listing
+
+                # Get all symbols with exchange info
+                df = listing.symbols_by_exchange()
+
+                # Filter by exchange if specified
+                # Map HOSE -> HSX for vnstock
                 if exchange:
-                    return listing.all_symbols(exchange=exchange)
-                else:
-                    # Fetch all exchanges
-                    hose = listing.all_symbols(exchange="HOSE")
-                    hnx = listing.all_symbols(exchange="HNX")
-                    upcom = listing.all_symbols(exchange="UPCOM")
-                    return pd.concat([hose, hnx, upcom], ignore_index=True)
+                    exchange_map = {
+                        "HOSE": "HSX",
+                        "HNX": "HNX",
+                        "UPCOM": "UPCOM",
+                    }
+                    vnstock_exchange = exchange_map.get(exchange.upper())
+                    if vnstock_exchange and 'exchange' in df.columns:
+                        df = df[df['exchange'] == vnstock_exchange]
+
+                return df
 
             df = await self._run_in_executor(fetch_data)
 
@@ -353,17 +364,33 @@ class VNStockClient:
                 return []
 
             # Standardize columns
+            # Map HSX back to HOSE for our system
+            exchange_reverse_map = {
+                "HSX": "HOSE",
+                "HNX": "HNX",
+                "UPCOM": "UPCOM",
+            }
+
+            # Valid exchanges for our system
+            valid_exchanges = {"HOSE", "HNX", "UPCOM"}
+
             stocks = []
             for _, row in df.iterrows():
-                stocks.append(
-                    {
-                        "ticker": row.get("ticker", row.get("symbol", "")),
-                        "name": row.get("organName", row.get("company_name", "")),
-                        "exchange": row.get("comGroupCode", exchange or ""),
-                        "industry": row.get("industryName", ""),
-                        "listing_date": None,
-                    }
-                )
+                # Map exchange back to HOSE from HSX
+                stock_exchange = row.get("exchange", "")
+                stock_exchange = exchange_reverse_map.get(stock_exchange, stock_exchange)
+
+                # Only include stocks with valid exchanges and type=STOCK
+                if stock_exchange in valid_exchanges and row.get("type") == "STOCK":
+                    stocks.append(
+                        {
+                            "ticker": row.get("symbol", ""),
+                            "name": row.get("organ_name", ""),
+                            "exchange": stock_exchange,
+                            "industry": row.get("type", ""),
+                            "listing_date": None,
+                        }
+                    )
 
             # Cache for 1 day
             result_df = pd.DataFrame(stocks)
