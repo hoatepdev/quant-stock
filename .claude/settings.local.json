@@ -19,7 +19,10 @@
       "Bash(python scripts/screen_stocks.py:*)",
       "Bash(tree:*)",
       "Bash(rm:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(python scripts/run_backtest.py:*)",
+      "Bash(python:*)",
+      "Bash(timeout 60 python:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

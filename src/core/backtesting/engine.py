@@ -321,6 +321,47 @@ class BacktestEngine:
             values=["open", "high", "low", "close", "volume"]
         )
 
+        # Filter out tickers with insufficient data
+        # Check which tickers have at least 20 days of data and minimal NaN values
+        valid_tickers = []
+        skipped_tickers = []
+
+        for ticker in tickers:
+            if ("close", ticker) not in df.columns:
+                skipped_tickers.append(ticker)
+                logger.warning(f"Skipping {ticker}: No price data available")
+                continue
+
+            close_prices = df[("close", ticker)]
+            total_days = len(df)
+            nan_count = close_prices.isna().sum()
+            valid_days = total_days - nan_count
+            nan_ratio = nan_count / total_days if total_days > 0 else 1.0
+
+            # Skip ticker if it has less than 20 days of data or >30% NaN values
+            if valid_days < 20:
+                skipped_tickers.append(ticker)
+                logger.warning(f"Skipping {ticker}: Only {valid_days} days of data (need at least 20)")
+                continue
+
+            if nan_ratio > 0.3:
+                skipped_tickers.append(ticker)
+                logger.warning(f"Skipping {ticker}: {nan_ratio:.1%} missing data (threshold: 30%)")
+                continue
+
+            valid_tickers.append(ticker)
+
+        if not valid_tickers:
+            logger.error(f"No valid tickers after filtering. Skipped: {', '.join(skipped_tickers)}")
+            return {}
+
+        logger.info(f"Valid tickers: {', '.join(valid_tickers)}")
+        if skipped_tickers:
+            logger.info(f"Skipped tickers: {', '.join(skipped_tickers)}")
+
+        # Update tickers to only valid ones
+        tickers = valid_tickers
+
         # Run backtest day by day
         trading_days = sorted(df.index.unique())
 
@@ -329,10 +370,12 @@ class BacktestEngine:
             current_prices = {}
             for ticker in tickers:
                 try:
-                    current_prices[ticker] = Decimal(
-                        str(df.loc[trading_day, ("close", ticker)])
-                    )
-                except:
+                    price = df.loc[trading_day, ("close", ticker)]
+                    # Skip if price is NaN or None
+                    if pd.isna(price):
+                        continue
+                    current_prices[ticker] = Decimal(str(price))
+                except Exception:
                     continue
 
             # Get signals from strategy
@@ -352,11 +395,22 @@ class BacktestEngine:
             })
 
         # Close all remaining positions
-        final_prices = {
-            ticker: Decimal(str(df.iloc[-1][("close", ticker)]))
-            for ticker in tickers
-            if ("close", ticker) in df.columns
-        }
+        final_prices = {}
+        for ticker in tickers:
+            if ("close", ticker) not in df.columns:
+                continue
+
+            try:
+                price = df.iloc[-1][("close", ticker)]
+                # Skip if price is NaN
+                if pd.isna(price):
+                    logger.warning(f"Cannot close position for {ticker}: NaN price on {end_date}")
+                    continue
+
+                final_prices[ticker] = Decimal(str(price))
+            except Exception as e:
+                logger.warning(f"Cannot get final price for {ticker}: {e}")
+                continue
 
         for position in list(self.portfolio.positions):
             if position.ticker in final_prices:
@@ -364,6 +418,10 @@ class BacktestEngine:
                     position.ticker,
                     end_date,
                     final_prices[position.ticker]
+                )
+            else:
+                logger.warning(
+                    f"Position {position.ticker} remains open - no valid exit price available"
                 )
 
         # Calculate final statistics

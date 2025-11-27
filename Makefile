@@ -29,6 +29,13 @@ help:
 	@echo "  make screen-all       Run all screening strategies"
 	@echo "  make screen-stats     Show database statistics"
 	@echo ""
+	@echo "Backtesting:"
+	@echo "  make backtest-ma      Backtest Moving Average strategy"
+	@echo "  make backtest-momentum Backtest Momentum strategy"
+	@echo "  make backtest-compare Compare all strategies"
+	@echo "  make backtest-demo    Run backtest demo"
+	@echo "  make backtest-custom  Run custom strategy examples"
+	@echo ""
 	@echo "Docker:"
 	@echo "  make docker-build     Build Docker images"
 	@echo "  make docker-up        Start all Docker services"
@@ -163,3 +170,55 @@ dev-setup: install-dev init-db
 	@echo "Run 'make docker-up' to start services"
 	@echo "Run 'make load-stocks' to load stock list"
 	@echo "Run 'make backfill-data' to load historical data"
+
+# Backtesting commands
+backtest-ma:
+	@echo "Running Moving Average backtest on VCB, VNM, HPG..."
+	$(PYTHON) scripts/run_backtest.py --strategy ma --tickers VCB,VNM,HPG --plot --save
+
+backtest-momentum:
+	@echo "Running Momentum backtest on VCB, VNM, HPG, VIC, MSN..."
+	$(PYTHON) scripts/run_backtest.py --strategy momentum --tickers VCB,VNM,HPG,VIC,MSN --plot --save
+
+backtest-mean-reversion:
+	@echo "Running Mean Reversion backtest on VCB, VNM, HPG..."
+	$(PYTHON) scripts/run_backtest.py --strategy mean_reversion --tickers VCB,VNM,HPG --plot --save
+
+backtest-compare:
+	@echo "Comparing all strategies on VCB, VNM, HPG, VIC, MSN..."
+	$(PYTHON) scripts/run_backtest.py --compare --tickers VCB,VNM,HPG,VIC,MSN --plot --save
+
+backtest-demo:
+	@echo "Running Phase 2 backtest demo..."
+	$(PYTHON) scripts/phase2_demo.py
+
+backtest-custom:
+	@echo "Running custom strategy examples..."
+	$(PYTHON) examples/custom_strategy_example.py
+
+backtest-help:
+	@echo "Backtest Commands Usage:"
+	@echo ""
+	@echo "Quick commands:"
+	@echo "  make backtest-ma              Run MA strategy on default tickers"
+	@echo "  make backtest-momentum        Run Momentum strategy"
+	@echo "  make backtest-compare         Compare all strategies"
+	@echo ""
+	@echo "Custom backtest:"
+	@echo "  python scripts/run_backtest.py --strategy ma --tickers VCB,VNM"
+	@echo "  python scripts/run_backtest.py --compare --tickers VCB,VNM,HPG,VIC"
+	@echo ""
+	@echo "Advanced options:"
+	@echo "  --start-date YYYY-MM-DD       Set start date"
+	@echo "  --end-date YYYY-MM-DD         Set end date"
+	@echo "  --capital 200000000           Set initial capital"
+	@echo "  --commission 0.002            Set commission rate"
+	@echo "  --plot                        Generate charts"
+	@echo "  --save                        Save results to files"
+	@echo ""
+	@echo "For full help:"
+	@echo "  python scripts/run_backtest.py --help"
+	@echo ""
+	@echo "Documentation:"
+	@echo "  docs/BACKTEST_GUIDE.md        Complete backtest guide"
+	@echo "  examples/custom_strategy_example.py  Custom strategy examples"
