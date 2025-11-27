@@ -6,47 +6,47 @@ PIP := pip3
 DOCKER_COMPOSE := docker-compose -f docker/docker-compose.yml
 
 help:
-	@echo "Vietnam Quant Platform - Available Commands:"
+	@echo "Nền tảng Vietnam Quant - Các lệnh có sẵn:"
 	@echo ""
-	@echo "Development:"
-	@echo "  make install          Install production dependencies"
-	@echo "  make install-dev      Install development dependencies"
-	@echo "  make run-api          Run FastAPI server locally"
-	@echo "  make format           Format code with black and isort"
-	@echo "  make lint             Run linters (flake8, mypy, pylint)"
-	@echo "  make run-tests        Run all tests with coverage"
+	@echo "Phát triển:"
+	@echo "  make install          Cài đặt dependencies production"
+	@echo "  make install-dev      Cài đặt dependencies development"
+	@echo "  make run-api          Chạy FastAPI server local"
+	@echo "  make format           Format code với black và isort"
+	@echo "  make lint             Chạy linters (flake8, mypy, pylint)"
+	@echo "  make run-tests        Chạy tất cả tests với coverage"
 	@echo ""
 	@echo "Database:"
-	@echo "  make init-db          Initialize database schema"
-	@echo "  make load-stocks      Load stock list from data source"
-	@echo "  make backfill-data    Backfill historical data"
-	@echo "  make calc-ratios      Calculate financial ratios for all stocks"
+	@echo "  make init-db          Khởi tạo schema database"
+	@echo "  make load-stocks      Tải danh sách cổ phiếu từ nguồn dữ liệu"
+	@echo "  make backfill-data    Nạp dữ liệu lịch sử"
+	@echo "  make calc-ratios      Tính chỉ số tài chính cho tất cả cổ phiếu"
 	@echo ""
-	@echo "Stock Screening:"
-	@echo "  make screen-value     Screen for value stocks"
-	@echo "  make screen-growth    Screen for growth stocks"
-	@echo "  make screen-quality   Screen for quality stocks"
-	@echo "  make screen-all       Run all screening strategies"
-	@echo "  make screen-stats     Show database statistics"
+	@echo "Sàng lọc Cổ phiếu:"
+	@echo "  make screen-value     Sàng lọc cổ phiếu giá trị"
+	@echo "  make screen-growth    Sàng lọc cổ phiếu tăng trưởng"
+	@echo "  make screen-quality   Sàng lọc cổ phiếu chất lượng"
+	@echo "  make screen-all       Chạy tất cả chiến lược sàng lọc"
+	@echo "  make screen-stats     Hiển thị thống kê database"
 	@echo ""
 	@echo "Backtesting:"
-	@echo "  make backtest-ma            Backtest Moving Average strategy"
-	@echo "  make backtest-momentum      Backtest Momentum strategy"
-	@echo "  make backtest-compare       Compare all strategies"
-	@echo "  make backtest-realistic     Run with realistic execution (default)"
-	@echo "  make backtest-baseline      Run baseline (no slippage/sizing)"
-	@echo "  make backtest-test-slippage Compare realistic vs baseline"
-	@echo "  make backtest-demo          Run backtest demo"
-	@echo "  make backtest-custom        Run custom strategy examples"
+	@echo "  make backtest-ma            Backtest chiến lược Moving Average"
+	@echo "  make backtest-momentum      Backtest chiến lược Momentum"
+	@echo "  make backtest-compare       So sánh tất cả chiến lược"
+	@echo "  make backtest-realistic     Chạy với thực thi thực tế (mặc định)"
+	@echo "  make backtest-baseline      Chạy baseline (không slippage/sizing)"
+	@echo "  make backtest-test-slippage So sánh realistic vs baseline"
+	@echo "  make backtest-demo          Chạy backtest demo"
+	@echo "  make backtest-custom        Chạy ví dụ chiến lược tùy chỉnh"
 	@echo ""
 	@echo "Docker:"
 	@echo "  make docker-build     Build Docker images"
-	@echo "  make docker-up        Start all Docker services"
-	@echo "  make docker-down      Stop all Docker services"
-	@echo "  make docker-logs      View Docker logs"
+	@echo "  make docker-up        Khởi động tất cả Docker services"
+	@echo "  make docker-down      Dừng tất cả Docker services"
+	@echo "  make docker-logs      Xem Docker logs"
 	@echo ""
-	@echo "Utilities:"
-	@echo "  make clean            Clean temporary files and caches"
+	@echo "Tiện ích:"
+	@echo "  make clean            Dọn dẹp file tạm và caches"
 
 install:
 	$(PIP) install -r requirements.txt
@@ -65,19 +65,19 @@ backfill-data:
 	$(PYTHON) scripts/backfill_data.py
 
 calc-ratios:
-	@echo "Calculating financial ratios for all stocks (2s delay to avoid rate limits)..."
+	@echo "Đang tính chỉ số tài chính cho tất cả cổ phiếu (delay 2s để tránh rate limit)..."
 	$(PYTHON) scripts/calculate_financial_ratios.py --delay=2.0
 
 calc-ratios-test:
-	@echo "Testing with 10 stocks..."
+	@echo "Đang test với 10 cổ phiếu..."
 	$(PYTHON) scripts/calculate_financial_ratios.py --limit=10 --delay=1.0
 
 calc-ratios-exchange:
 	@if [ -z "$(EXCHANGE)" ]; then \
-		echo "Usage: make calc-ratios-exchange EXCHANGE=HOSE"; \
-		echo "Valid exchanges: HOSE, HNX, UPCOM"; \
+		echo "Cách dùng: make calc-ratios-exchange EXCHANGE=HOSE"; \
+		echo "Sàn hợp lệ: HOSE, HNX, UPCOM"; \
 	else \
-		echo "Calculating ratios for $(EXCHANGE) stocks (2s delay)..."; \
+		echo "Đang tính chỉ số cho cổ phiếu $(EXCHANGE) (delay 2s)..."; \
 		$(PYTHON) scripts/calculate_financial_ratios.py --exchange=$(EXCHANGE) --delay=2.0; \
 	fi
 
@@ -100,17 +100,17 @@ screen-all:
 	$(PYTHON) scripts/screen_stocks.py strategy --strategy=all
 
 screen-custom:
-	@echo "Usage: make screen-custom ARGS='--max-pe=15 --min-roe=15'"
-	@echo "Example filters: --max-pe, --min-roe, --min-revenue-growth, --max-debt-to-equity"
-	@echo "See: python scripts/screen_stocks.py custom --help"
+	@echo "Cách dùng: make screen-custom ARGS='--max-pe=15 --min-roe=15'"
+	@echo "Ví dụ bộ lọc: --max-pe, --min-roe, --min-revenue-growth, --max-debt-to-equity"
+	@echo "Xem: python scripts/screen_stocks.py custom --help"
 
 screen-stats:
 	$(PYTHON) scripts/screen_stocks.py stats
 
 screen-analyze:
 	@if [ -z "$(TICKER)" ]; then \
-		echo "Usage: make screen-analyze TICKER=VNM"; \
-		echo "Example: make screen-analyze TICKER=HPG"; \
+		echo "Cách dùng: make screen-analyze TICKER=VNM"; \
+		echo "Ví dụ: make screen-analyze TICKER=HPG"; \
 	else \
 		$(PYTHON) scripts/screen_stocks.py analyze --ticker=$(TICKER); \
 	fi
@@ -135,10 +135,10 @@ docker-build:
 
 docker-up:
 	$(DOCKER_COMPOSE) up -d
-	@echo "Services starting..."
-	@echo "API will be available at http://localhost:8000"
-	@echo "API docs at http://localhost:8000/docs"
-	@echo "pgAdmin at http://localhost:5050 (if dev profile enabled)"
+	@echo "Đang khởi động services..."
+	@echo "API sẽ có sẵn tại http://localhost:8000"
+	@echo "Tài liệu API tại http://localhost:8000/docs"
+	@echo "pgAdmin tại http://localhost:5050 (nếu bật dev profile)"
 
 docker-down:
 	$(DOCKER_COMPOSE) down
@@ -160,7 +160,7 @@ clean:
 	find . -type d -name ".pytest_cache" -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null || true
 	rm -rf htmlcov/ .coverage build/ dist/
-	@echo "Cleaned temporary files and caches"
+	@echo "Đã dọn dẹp file tạm và caches"
 
 test-unit:
 	pytest src/tests/unit/ -v
@@ -169,72 +169,72 @@ test-integration:
 	pytest src/tests/integration/ -v
 
 dev-setup: install-dev init-db
-	@echo "Development environment setup complete!"
-	@echo "Run 'make docker-up' to start services"
-	@echo "Run 'make load-stocks' to load stock list"
-	@echo "Run 'make backfill-data' to load historical data"
+	@echo "Hoàn tất cài đặt môi trường development!"
+	@echo "Chạy 'make docker-up' để khởi động services"
+	@echo "Chạy 'make load-stocks' để tải danh sách cổ phiếu"
+	@echo "Chạy 'make backfill-data' để tải dữ liệu lịch sử"
 
 # Backtesting commands
 backtest-ma:
-	@echo "Running Moving Average backtest on VCB, VNM, HPG..."
+	@echo "Đang chạy backtest Moving Average trên VCB, VNM, HPG..."
 	$(PYTHON) scripts/run_backtest.py --strategy ma --tickers VCB,VNM,HPG --plot --save
 
 backtest-momentum:
-	@echo "Running Momentum backtest on VCB, VNM, HPG, VIC, MSN..."
+	@echo "Đang chạy backtest Momentum trên VCB, VNM, HPG, VIC, MSN..."
 	$(PYTHON) scripts/run_backtest.py --strategy momentum --tickers VCB,VNM,HPG,VIC,MSN --plot --save
 
 backtest-mean-reversion:
-	@echo "Running Mean Reversion backtest on VCB, VNM, HPG..."
+	@echo "Đang chạy backtest Mean Reversion trên VCB, VNM, HPG..."
 	$(PYTHON) scripts/run_backtest.py --strategy mean_reversion --tickers VCB,VNM,HPG --plot --save
 
 backtest-compare:
-	@echo "Comparing all strategies on VCB, VNM, HPG, VIC, MSN..."
+	@echo "Đang so sánh tất cả chiến lược trên VCB, VNM, HPG, VIC, MSN..."
 	$(PYTHON) scripts/run_backtest.py --compare --tickers VCB,VNM,HPG,VIC,MSN --plot --save
 
 backtest-demo:
-	@echo "Running Phase 2 backtest demo..."
+	@echo "Đang chạy Phase 2 backtest demo..."
 	$(PYTHON) scripts/phase2_demo.py
 
 backtest-custom:
-	@echo "Running custom strategy examples..."
+	@echo "Đang chạy ví dụ chiến lược tùy chỉnh..."
 	$(PYTHON) examples/custom_strategy_example.py
 
 backtest-realistic:
-	@echo "Running backtest with realistic execution (slippage + dynamic sizing)..."
+	@echo "Đang chạy backtest với thực thi thực tế (slippage + dynamic sizing)..."
 	$(PYTHON) scripts/run_backtest.py --strategy buy_hold --tickers VHC,PVT --start-date 2024-01-01
 
 backtest-baseline:
-	@echo "Running baseline backtest (no slippage, no dynamic sizing)..."
+	@echo "Đang chạy baseline backtest (không slippage, không dynamic sizing)..."
 	$(PYTHON) scripts/run_backtest.py --strategy buy_hold --tickers VHC,PVT --start-date 2024-01-01 --no-slippage --no-dynamic-sizing
 
 backtest-test-slippage:
-	@echo "Testing slippage impact..."
+	@echo "Đang test tác động slippage..."
 	$(PYTHON) test_slippage_comparison.py
 
 backtest-help:
-	@echo "Backtest Commands Usage:"
+	@echo "Cách dùng lệnh Backtest:"
 	@echo ""
-	@echo "Quick commands:"
-	@echo "  make backtest-ma              Run MA strategy on default tickers"
-	@echo "  make backtest-momentum        Run Momentum strategy"
-	@echo "  make backtest-compare         Compare all strategies"
+	@echo "Lệnh nhanh:"
+	@echo "  make backtest-ma              Chạy chiến lược MA trên các mã mặc định"
+	@echo "  make backtest-momentum        Chạy chiến lược Momentum"
+	@echo "  make backtest-compare         So sánh tất cả chiến lược"
 	@echo ""
-	@echo "Custom backtest:"
+	@echo "Backtest tùy chỉnh:"
 	@echo "  python scripts/run_backtest.py --strategy ma --tickers VCB,VNM"
 	@echo "  python scripts/run_backtest.py --compare --tickers VCB,VNM,HPG,VIC"
 	@echo ""
-	@echo "Advanced options:"
-	@echo "  --start-date YYYY-MM-DD       Set start date"
-	@echo "  --end-date YYYY-MM-DD         Set end date"
-	@echo "  --capital 200000000           Set initial capital"
-	@echo "  --commission 0.002            Set commission rate"
-	@echo "  --plot                        Generate charts"
-	@echo "  --save                        Save results to files"
+	@echo "Tùy chọn nâng cao:"
+	@echo "  --start-date YYYY-MM-DD       Đặt ngày bắt đầu"
+	@echo "  --end-date YYYY-MM-DD         Đặt ngày kết thúc"
+	@echo "  --capital 200000000           Đặt vốn ban đầu"
+	@echo "  --commission 0.002            Đặt tỷ lệ phí giao dịch"
+	@echo "  --plot                        Tạo biểu đồ"
+	@echo "  --save                        Lưu kết quả vào file"
 	@echo ""
-	@echo "For full help:"
+	@echo "Để xem đầy đủ trợ giúp:"
 	@echo "  python scripts/run_backtest.py --help"
 	@echo ""
-	@echo "Documentation:"
-	@echo "  docs/BACKTEST_COMPLETE_GUIDE.md  Complete backtest guide (quickstart + reference + advanced)"
-	@echo "  docs/BACKTEST_UPGRADES.md        Technical details on realistic execution"
-	@echo "  examples/custom_strategy_example.py  Custom strategy examples"
+	@echo "Tài liệu:"
+	@echo "  docs/BACKTEST_COMPLETE_GUIDE.md  Hướng dẫn backtest đầy đủ (quickstart + tham chiếu + nâng cao)"
+	@echo "  docs/BACKTEST_UPGRADES.md        Chi tiết kỹ thuật về thực thi thực tế"
+	@echo "  examples/custom_strategy_example.py  Ví dụ chiến lược tùy chỉnh"

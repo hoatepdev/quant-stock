@@ -1,4 +1,4 @@
-# Backtest Engine Upgrades - Realistic Execution & Risk Metrics
+# Nâng cấp Backtest Engine - Thực thi Thực tế & Chỉ số Rủi ro
 
 ## Tổng quan
 
@@ -170,26 +170,26 @@ std_return = np.std(daily_returns)
 sharpe = (mean_return / std_return * np.sqrt(252)) if std_return > 0 else 0
 ```
 
-**Interpretation:**
-- Sharpe > 1.0: Good risk-adjusted returns
-- Sharpe > 2.0: Excellent
-- Sharpe < 0: Losing money on average
+**Giải thích:**
+- Sharpe > 1.0: Lợi nhuận điều chỉnh rủi ro tốt
+- Sharpe > 2.0: Xuất sắc
+- Sharpe < 0: Trung bình đang thua lỗ
 
 ### Sortino Ratio
 ```python
-# Sortino Ratio (only penalize downside volatility)
+# Sortino Ratio (chỉ phạt biến động giảm giá)
 downside_returns = [r for r in returns if r < 0]
 downside_std = np.std(downside_returns)
 sortino = (mean_return / downside_std * np.sqrt(252)) if downside_std > 0 else 0
 ```
 
-**Interpretation:**
-- Similar to Sharpe but only counts downside risk
-- Better reflects investor preferences (upside volatility is good)
+**Giải thích:**
+- Tương tự Sharpe nhưng chỉ tính rủi ro giảm giá
+- Phản ánh tốt hơn sở thích nhà đầu tư (biến động tăng giá là tốt)
 
 ## Cách sử dụng
 
-### 1. Enable/Disable Features
+### 1. Bật/Tắt Tính năng
 
 ```python
 from src.core.backtesting.engine import BacktestEngine
@@ -228,7 +228,7 @@ engine = BacktestEngine(
 )
 ```
 
-### 2. Run Backtest
+### 2. Chạy Backtest
 
 ```python
 from src.core.backtesting.strategies import buy_and_hold_strategy
@@ -245,13 +245,13 @@ print(f"Sharpe Ratio: {results['sharpe_ratio']:.2f}")
 print(f"Max Drawdown: {results['max_drawdown']:.2%}")
 ```
 
-### 3. CLI Usage
+### 3. Sử dụng CLI
 
 ```bash
-# Default: Realistic mode enabled
+# Mặc định: Bật chế độ realistic
 python scripts/run_backtest.py --tickers VHC,PVT --strategy buy_hold
 
-# Compare strategies with realistic execution
+# So sánh các chiến lược với thực thi thực tế
 python scripts/run_backtest.py --compare --tickers VCB,VNM,HPG
 ```
 
@@ -296,12 +296,12 @@ python scripts/run_backtest.py --compare --tickers VCB,VNM,HPG
 - Slippage vẫn áp dụng nhưng nhỏ hơn
 - Impact tổng thể thấp hơn (~10-20% thay vì 78%)
 
-## Best Practices
+## Thực hành Tốt nhất
 
-### 1. Luôn dùng Realistic Mode cho Production
+### 1. Luôn dùng Chế độ Realistic cho Production
 
 ```python
-# ✅ GOOD: Realistic backtest
+# ✅ TỐT: Backtest realistic
 engine = BacktestEngine(
     db=db,
     use_slippage=True,
@@ -310,7 +310,7 @@ engine = BacktestEngine(
 ```
 
 ```python
-# ❌ BAD: Overly optimistic
+# ❌ KHÔNG TỐT: Quá lạc quan
 engine = BacktestEngine(
     db=db,
     use_slippage=False,
@@ -318,133 +318,133 @@ engine = BacktestEngine(
 )
 ```
 
-### 2. Adjust Parameters cho Market Conditions
+### 2. Điều chỉnh Tham số cho Điều kiện Thị trường
 
-**High-frequency trading:**
+**Giao dịch tần suất cao:**
 ```python
-# More slippage, tighter volume limits
+# Slippage cao hơn, giới hạn volume chặt hơn
 engine = BacktestEngine(
     db=db,
     use_slippage=True,
     use_dynamic_sizing=True
 )
-# Modify in code:
-# - impact_coefficient = 0.15 (higher slippage)
-# - max_pct_of_volume = 0.02 (max 2% of volume)
+# Sửa trong code:
+# - impact_coefficient = 0.15 (slippage cao hơn)
+# - max_pct_of_volume = 0.02 (tối đa 2% volume)
 ```
 
-**Long-term investing:**
+**Đầu tư dài hạn:**
 ```python
-# Standard settings OK
+# Cài đặt tiêu chuẩn OK
 engine = BacktestEngine(
     db=db,
     use_slippage=True,
     use_dynamic_sizing=True
 )
-# - impact_coefficient = 0.1 (default)
-# - max_pct_of_volume = 0.05 (default 5%)
+# - impact_coefficient = 0.1 (mặc định)
+# - max_pct_of_volume = 0.05 (mặc định 5%)
 ```
 
-### 3. Compare Before/After
+### 3. So sánh Trước/Sau
 
-Luôn chạy cả 2 modes để hiểu impact:
+Luôn chạy cả 2 chế độ để hiểu tác động:
 
 ```python
-# Run test_slippage_comparison.py
+# Chạy test_slippage_comparison.py
 python test_slippage_comparison.py
 ```
 
-Output shows:
-- Baseline return (theoretical maximum)
-- Realistic return (expected in production)
-- Impact breakdown (slippage vs sizing)
+Kết quả hiển thị:
+- Lợi nhuận baseline (tối đa lý thuyết)
+- Lợi nhuận realistic (dự kiến trong production)
+- Phân tích tác động (slippage vs sizing)
 
-### 4. Monitor Risk Metrics
+### 4. Giám sát Chỉ số Rủi ro
 
 ```python
 results = engine.run(...)
 
-# Check risk-adjusted returns
+# Kiểm tra lợi nhuận điều chỉnh rủi ro
 if results['sharpe_ratio'] < 0.5:
-    print("Warning: Poor risk-adjusted returns")
+    print("Cảnh báo: Lợi nhuận điều chỉnh rủi ro kém")
 
-# Check drawdown
+# Kiểm tra drawdown
 if results['max_drawdown'] > 0.2:
-    print("Warning: High drawdown risk (>20%)")
+    print("Cảnh báo: Rủi ro drawdown cao (>20%)")
 ```
 
-## Hạn chế và Future Work
+## Hạn chế và Công việc Tương lai
 
 ### Hạn chế hiện tại
 
-1. **Fixed Impact Coefficient**
+1. **Hệ số Tác động Cố định**
    - `impact_coefficient = 0.1` cố định
-   - Thực tế có thể khác nhau theo stock
-   - Future: Calibrate per stock/sector
+   - Thực tế có thể khác nhau theo từng cổ phiếu
+   - Tương lai: Hiệu chỉnh theo từng cổ phiếu/ngành
 
-2. **Square-root Model Assumption**
-   - Giả định market impact theo square-root
-   - Có thể không chính xác cho extreme cases
-   - Future: Research Vietnamese market microstructure
+2. **Giả định Mô hình Căn bậc hai**
+   - Giả định tác động thị trường theo căn bậc hai
+   - Có thể không chính xác cho các trường hợp cực đoan
+   - Tương lai: Nghiên cứu cấu trúc vi mô thị trường Việt Nam
 
-3. **No Intraday Simulation**
-   - Daily bar backtest
-   - Không tính partial fills
-   - Future: Tick-level simulation
+3. **Không Mô phỏng Trong ngày**
+   - Backtest theo thanh ngày
+   - Không tính khớp lệnh từng phần
+   - Tương lai: Mô phỏng mức tick
 
-4. **Volume Assumption**
-   - Giả định volume ổn định
-   - Thực tế có thể spike/drop
-   - Future: Use rolling average, add variance
+4. **Giả định Khối lượng**
+   - Giả định khối lượng ổn định
+   - Thực tế có thể tăng đột biến/giảm mạnh
+   - Tương lai: Dùng trung bình trượt, thêm phương sai
 
-### Roadmap
+### Lộ trình
 
-**Phase 1 (Completed ✅):**
-- [x] Slippage model
-- [x] Dynamic position sizing
-- [x] Risk metrics (Sharpe, Sortino, Max DD)
+**Phase 1 (Đã hoàn thành ✅):**
+- [x] Mô hình slippage
+- [x] Định cỡ vị thế động
+- [x] Chỉ số rủi ro (Sharpe, Sortino, Max DD)
 
-**Phase 2 (Next):**
-- [ ] Configurable slippage parameters per stock
-- [ ] Volume forecasting (GARCH model)
-- [ ] Partial fill simulation
-- [ ] Transaction cost breakdown reporting
+**Phase 2 (Tiếp theo):**
+- [ ] Tham số slippage có thể cấu hình theo cổ phiếu
+- [ ] Dự báo khối lượng (mô hình GARCH)
+- [ ] Mô phỏng khớp lệnh từng phần
+- [ ] Báo cáo phân tích chi phí giao dịch
 
-**Phase 3 (Future):**
-- [ ] Tick-level simulation
-- [ ] Order book modeling
-- [ ] Multi-timeframe analysis
-- [ ] Live trading integration with same logic
+**Phase 3 (Tương lai):**
+- [ ] Mô phỏng mức tick
+- [ ] Mô hình sổ lệnh
+- [ ] Phân tích đa khung thời gian
+- [ ] Tích hợp giao dịch thực với cùng logic
 
 ## Kết luận
 
-Backtest engine upgrades đã giải quyết được:
+Các nâng cấp Backtest engine đã giải quyết được:
 
-1. ✅ **Realistic execution modeling**
-   - Slippage based on market impact
-   - Position sizing based on liquidity
-   - More accurate P&L estimation
+1. ✅ **Mô hình hóa thực thi thực tế**
+   - Slippage dựa trên tác động thị trường
+   - Định cỡ vị thế dựa trên thanh khoản
+   - Ước tính P&L chính xác hơn
 
-2. ✅ **Risk metrics**
-   - Sharpe ratio for risk-adjusted returns
-   - Sortino ratio for downside risk
-   - Maximum drawdown for risk management
+2. ✅ **Chỉ số rủi ro**
+   - Sharpe ratio cho lợi nhuận điều chỉnh rủi ro
+   - Sortino ratio cho rủi ro giảm giá
+   - Maximum drawdown cho quản lý rủi ro
 
-3. ✅ **Validation**
-   - Tested with VHC/PVT data
-   - Impact quantified (~78% reduction for low liquidity)
-   - Comparison framework established
+3. ✅ **Xác thực**
+   - Đã kiểm tra với dữ liệu VHC/PVT
+   - Tác động được định lượng (~78% giảm với thanh khoản thấp)
+   - Đã thiết lập khung so sánh
 
 **Kết quả:**
-- Backtest results giờ đây realistic hơn 2-3x
-- Có thể tin tưởng vào con số để trade thực tế
-- Risk metrics giúp đánh giá strategy quality
+- Kết quả backtest giờ đây thực tế hơn 2-3 lần
+- Có thể tin tưởng vào con số để giao dịch thực tế
+- Chỉ số rủi ro giúp đánh giá chất lượng chiến lược
 
-**Next Steps:**
-- Test với screened stocks (ECI, DRI, VHC, PVT, DHC)
-- Compare realistic returns vs baseline
-- Adjust screening thresholds dựa trên realistic backtest
+**Bước tiếp theo:**
+- Kiểm tra với các cổ phiếu đã sàng lọc (ECI, DRI, VHC, PVT, DHC)
+- So sánh lợi nhuận realistic vs baseline
+- Điều chỉnh ngưỡng sàng lọc dựa trên backtest realistic
 
 ---
 
-*Document này được tạo ngày 2025-11-27 sau khi implement và test backtest engine upgrades.*
+*Tài liệu này được tạo ngày 2025-11-27 sau khi triển khai và kiểm tra các nâng cấp backtest engine.*

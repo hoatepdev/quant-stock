@@ -1,73 +1,73 @@
-# Vietnam Stock Market Quantitative Analysis Platform
+# Nền tảng Phân tích Định lượng Thị trường Chứng khoán Việt Nam
 
-A production-ready quantitative investment research and trading platform specifically designed for the Vietnam stock market. Analyze ~1,800 stocks across HOSE, HNX, and UPCoM exchanges using multiple investment methodologies.
+Nền tảng nghiên cứu đầu tư và giao dịch định lượng sẵn sàng cho production, được thiết kế đặc biệt cho thị trường chứng khoán Việt Nam. Phân tích ~1,800 cổ phiếu trên các sàn HOSE, HNX và UPCoM sử dụng nhiều phương pháp đầu tư khác nhau.
 
-## 🚀 Quick Start
+## 🚀 Bắt đầu nhanh
 
-Get started in 10 minutes! See [Quick Start Guide](docs/guides/QUICKSTART.md)
+Chỉ cần 10 phút để bắt đầu! Xem [Hướng dẫn Khởi động Nhanh](docs/guides/QUICKSTART.md)
 
 ```bash
-# 1. Configure environment
+# 1. Cấu hình môi trường
 cp .env.example .env
-# No API keys required! Uses vnstock (free) by default
-# Optional: nano .env to configure database password
+# Không cần API key! Sử dụng vnstock (miễn phí) mặc định
+# Tùy chọn: nano .env để cấu hình mật khẩu database
 
-# 2. Start services
+# 2. Khởi động các dịch vụ
 make docker-up
 
-# 3. Initialize database
+# 3. Khởi tạo database
 make init-db
 
-# 4. Access API
+# 4. Truy cập API
 open http://localhost:8000/docs
 ```
 
-## ✨ Features
+## ✨ Tính năng
 
-- **🆓 FREE Data Source**: Uses vnstock (no API keys required!)
-- **📊 Comprehensive Coverage**: 1,800+ Vietnamese stocks (HOSE, HNX, UPCoM)
-- **📈 50+ Investment Factors**: Fundamental, technical, and momentum indicators
-- **🔍 Advanced Screening**: Multi-factor stock screening with flexible filters
-- **💰 Corporate Actions**: Pre-adjusted prices (no manual adjustments needed)
-- **📅 Historical Data**: Price and financial data back to 2020
-- **⚡ High Performance**: TimescaleDB optimization for time-series data
-- **🐳 Production Ready**: Docker deployment with PostgreSQL + Redis
+- **🆓 Nguồn dữ liệu MIỄN PHÍ**: Sử dụng vnstock (không cần API key!)
+- **📊 Phủ sóng toàn diện**: 1,800+ cổ phiếu Việt Nam (HOSE, HNX, UPCoM)
+- **📈 50+ Chỉ số đầu tư**: Chỉ số cơ bản, kỹ thuật và động lượng
+- **🔍 Sàng lọc nâng cao**: Sàng lọc cổ phiếu đa chỉ số với bộ lọc linh hoạt
+- **💰 Sự kiện doanh nghiệp**: Giá điều chỉnh sẵn (không cần điều chỉnh thủ công)
+- **📅 Dữ liệu lịch sử**: Dữ liệu giá và tài chính từ năm 2020
+- **⚡ Hiệu suất cao**: Tối ưu hóa TimescaleDB cho dữ liệu chuỗi thời gian
+- **🐳 Sẵn sàng Production**: Triển khai Docker với PostgreSQL + Redis
 
-## 🛠️ Technology Stack
+## 🛠️ Công nghệ sử dụng
 
 - **Backend**: Python 3.10+, FastAPI, SQLAlchemy 2.0
 - **Database**: PostgreSQL 14 + TimescaleDB
 - **Cache**: Redis
-- **Data Source**: vnstock (default, free, no API key needed) or SSI iBoard API
-- **Data Processing**: pandas, numpy, pandas-ta
-- **Deployment**: Docker, Docker Compose
+- **Nguồn dữ liệu**: vnstock (mặc định, miễn phí, không cần API key) hoặc SSI iBoard API
+- **Xử lý dữ liệu**: pandas, numpy, pandas-ta
+- **Triển khai**: Docker, Docker Compose
 
-## 📈 Investment Factors
+## 📈 Các chỉ số đầu tư
 
-### Fundamental (20+)
-- Valuation: P/E, P/B, P/S, EV/EBITDA, Dividend Yield
-- Profitability: ROE, ROA, ROI, Margins (Gross, Operating, Net)
-- Leverage: Debt/Equity, Debt/Assets, Interest Coverage
-- Liquidity: Current Ratio, Quick Ratio, Cash Ratio
-- Efficiency: Asset Turnover, Inventory Turnover
-- Growth: Revenue Growth, EPS Growth (YoY, QoQ)
+### Chỉ số cơ bản (20+)
+- Định giá: P/E, P/B, P/S, EV/EBITDA, Tỷ suất cổ tức
+- Khả năng sinh lời: ROE, ROA, ROI, Biên lợi nhuận (Gộp, Hoạt động, Thuần)
+- Đòn bẩy: Nợ/Vốn chủ, Nợ/Tài sản, Khả năng thanh toán lãi vay
+- Thanh khoản: Tỷ số thanh toán hiện hành, Tỷ số thanh toán nhanh, Tỷ số tiền mặt
+- Hiệu quả: Vòng quay tài sản, Vòng quay hàng tồn kho
+- Tăng trưởng: Tăng trưởng doanh thu, Tăng trưởng EPS (YoY, QoQ)
 
-### Technical (15+)
-- Trend: SMA, EMA, MACD, ADX
-- Momentum: RSI, Stochastic, Williams %R
-- Volatility: Bollinger Bands, ATR
-- Volume: OBV, MFI, VWAP, Volume MA Ratio
-- Price Action: 52-week high/low distance
+### Chỉ số kỹ thuật (15+)
+- Xu hướng: SMA, EMA, MACD, ADX
+- Động lượng: RSI, Stochastic, Williams %R
+- Biến động: Bollinger Bands, ATR
+- Khối lượng: OBV, MFI, VWAP, Tỷ lệ khối lượng MA
+- Hành động giá: Khoảng cách từ đỉnh/đáy 52 tuần
 
-### Momentum (10+)
-- Returns: 1W, 1M, 3M, 6M, 12M
-- Relative Strength vs VN-Index
-- Risk-Adjusted Momentum
-- Price Acceleration
+### Động lượng (10+)
+- Lợi nhuận: 1 tuần, 1 tháng, 3 tháng, 6 tháng, 12 tháng
+- Sức mạnh tương đối so với VN-Index
+- Động lượng điều chỉnh rủi ro
+- Gia tốc giá
 
-## 🌐 API Examples
+## 🌐 Ví dụ API
 
-### Screen Stocks
+### Sàng lọc cổ phiếu
 ```bash
 curl -X POST "http://localhost:8000/api/v1/screen" \
   -H "Content-Type: application/json" \
@@ -83,42 +83,42 @@ curl -X POST "http://localhost:8000/api/v1/screen" \
   }'
 ```
 
-### Get Stock Factors
+### Lấy chỉ số cổ phiếu
 ```bash
 curl "http://localhost:8000/api/v1/factors/VNM"
 ```
 
-### List Tickers
+### Danh sách mã cổ phiếu
 ```bash
 curl "http://localhost:8000/api/v1/tickers?exchange=HOSE"
 ```
 
-## 📁 Project Structure
+## 📁 Cấu trúc dự án
 
 ```
 vnquant/
 ├── src/
-│   ├── api/              # FastAPI application
-│   ├── core/             # Business logic
-│   │   ├── factors/      # Factor calculations
-│   │   ├── data_ingestion/ # Data clients
+│   ├── api/              # Ứng dụng FastAPI
+│   ├── core/             # Logic nghiệp vụ
+│   │   ├── factors/      # Tính toán chỉ số
+│   │   ├── data_ingestion/ # Client dữ liệu
 │   │   └── corporate_actions/
-│   ├── database/         # SQLAlchemy models
-│   ├── utils/            # Utilities
-│   └── tests/            # Test suite
-├── docker/               # Docker configuration
-├── scripts/              # Operational scripts
-├── config/               # Configuration
-└── docs/                 # Documentation
+│   ├── database/         # Model SQLAlchemy
+│   ├── utils/            # Tiện ích
+│   └── tests/            # Bộ test
+├── docker/               # Cấu hình Docker
+├── scripts/              # Scripts vận hành
+├── config/               # Cấu hình
+└── docs/                 # Tài liệu
 ```
 
-## 🔧 Development
+## 🔧 Phát triển
 
 ```bash
-# Install dependencies
+# Cài đặt dependencies
 make install-dev
 
-# Run tests
+# Chạy tests
 make run-tests
 
 # Format code
@@ -128,91 +128,91 @@ make format
 make lint
 ```
 
-## 🇻🇳 Vietnam Market Specifics
+## 🇻🇳 Đặc thù thị trường Việt Nam
 
-- **±7% Daily Limits**: Handles price limit scenarios
-- **T+2 Settlement**: Settlement period tracking
-- **Foreign Ownership**: Limit monitoring
-- **Market Holidays**: Vietnamese calendar integration
-- **Three Exchanges**: HOSE, HNX, UPCoM support
+- **Biên độ ±7% hàng ngày**: Xử lý các tình huống giá trần/sàn
+- **Thanh toán T+2**: Theo dõi chu kỳ thanh toán
+- **Room ngoại**: Theo dõi giới hạn sở hữu nước ngoài
+- **Ngày nghỉ lễ**: Tích hợp lịch Việt Nam
+- **Ba sàn giao dịch**: Hỗ trợ HOSE, HNX, UPCoM
 
-## 📊 Database Models
+## 📊 Các bảng Database
 
-1. **stock_info** - Stock metadata
-2. **daily_price** - OHLCV data (TimescaleDB hypertable)
-3. **financial_statement** - Quarterly/annual financials
-4. **financial_ratio** - Calculated ratios
-5. **corporate_action** - Splits, dividends
-6. **factor** - Investment factors (TimescaleDB hypertable)
-7. **market_index** - VN-Index, HNX-Index data
-8. **data_quality_log** - Validation logs
+1. **stock_info** - Thông tin metadata cổ phiếu
+2. **daily_price** - Dữ liệu OHLCV (TimescaleDB hypertable)
+3. **financial_statement** - Báo cáo tài chính quý/năm
+4. **financial_ratio** - Các chỉ số tài chính đã tính
+5. **corporate_action** - Chia tách, cổ tức
+6. **factor** - Các chỉ số đầu tư (TimescaleDB hypertable)
+7. **market_index** - Dữ liệu VN-Index, HNX-Index
+8. **data_quality_log** - Log kiểm tra chất lượng dữ liệu
 
-## 🎯 Project Status
+## 🎯 Trạng thái dự án
 
-### ✅ All Phases Complete!
+### ✅ Đã hoàn thành tất cả các Phase!
 
-- **Phase 1 (MVP)** ✅ - Core infrastructure, factors, screening
-- **Phase 2** ✅ - Backtesting, portfolio optimization, corporate actions
-- **Phase 3** ✅ - ML models, sentiment analysis, real-time feeds
-- **Phase 4** ✅ - Trading integration, risk management, order management
+- **Phase 1 (MVP)** ✅ - Hạ tầng cốt lõi, chỉ số, sàng lọc
+- **Phase 2** ✅ - Backtest, tối ưu danh mục, sự kiện doanh nghiệp
+- **Phase 3** ✅ - Mô hình ML, phân tích cảm xúc, dữ liệu real-time
+- **Phase 4** ✅ - Tích hợp giao dịch, quản lý rủi ro, quản lý lệnh
 
-See [Phase Completion Docs](docs/phases/) for details.
+Xem [Tài liệu các Phase](docs/phases/) để biết chi tiết.
 
-## 📚 Documentation
+## �� Tài liệu
 
-### Quick Start & Setup
-- [Quick Start Guide](docs/guides/QUICKSTART.md) - Get started in 10 minutes
-- [Detailed Setup Guide](docs/guides/SETUP.md) - Comprehensive installation
-- [VNStock Integration](docs/guides/VNSTOCK_INTEGRATION.md) - Free data source setup
-- [Quant Trading Guide (Vietnamese)](docs/guides/HUONG_DAN_QUANT_TRADING.md) - Complete trading workflow
+### Khởi động & Cài đặt
+- [Hướng dẫn Khởi động Nhanh](docs/guides/QUICKSTART.md) - Bắt đầu trong 10 phút
+- [Hướng dẫn Cài đặt Chi tiết](docs/guides/SETUP.md) - Cài đặt toàn diện
+- [Tích hợp VNStock](docs/guides/VNSTOCK_INTEGRATION.md) - Thiết lập nguồn dữ liệu miễn phí
+- [Hướng dẫn Quant Trading](docs/guides/HUONG_DAN_QUANT_TRADING.md) - Quy trình giao dịch hoàn chỉnh
 
-### Backtesting & Trading
-- [Backtest Complete Guide](docs/BACKTEST_COMPLETE_GUIDE.md) - Comprehensive backtesting guide (quickstart + reference + advanced features)
-- [Backtest Upgrades](docs/BACKTEST_UPGRADES.md) - Technical details on realistic execution & risk metrics
+### Backtest & Giao dịch
+- [Hướng dẫn Backtest Toàn diện](docs/BACKTEST_COMPLETE_GUIDE.md) - Hướng dẫn backtest đầy đủ (khởi động + tham chiếu + tính năng nâng cao)
+- [Nâng cấp Backtest](docs/BACKTEST_UPGRADES.md) - Chi tiết kỹ thuật về thực thi thực tế & chỉ số rủi ro
 
-### Phase Documentation
-- [Phase 2 Guide](docs/phases/PHASE2.md) - Backtesting & portfolio optimization
-- [Phase 3 Guide](docs/phases/PHASE3.md) - ML & sentiment analysis
-- [Phase 4 Guide](docs/phases/PHASE4.md) - Trading system & risk management
+### Tài liệu các Phase
+- [Hướng dẫn Phase 2](docs/phases/PHASE2.md) - Backtest & tối ưu danh mục
+- [Hướng dẫn Phase 3](docs/phases/PHASE3.md) - ML & phân tích cảm xúc
+- [Hướng dẫn Phase 4](docs/phases/PHASE4.md) - Hệ thống giao dịch & quản lý rủi ro
 
-### Stock Screening
-- [Stock Screening Guide](docs/STOCK_SCREENING_GUIDE.md) - Comprehensive screening documentation
-- [Screening Improvements](docs/SCREENING_IMPROVEMENTS.md) - Latest improvements to screening system
+### Sàng lọc Cổ phiếu
+- [Hướng dẫn Sàng lọc Cổ phiếu](docs/STOCK_SCREENING_GUIDE.md) - Tài liệu sàng lọc toàn diện
+- [Cải tiến Sàng lọc](docs/SCREENING_IMPROVEMENTS.md) - Các cải tiến mới nhất cho hệ thống sàng lọc
 
-### Architecture & Technical
-- [Architecture Documentation](docs/ARCHITECTURE.md) - Technical overview & implementation details
-- [Documentation Index](docs/README.md) - Complete documentation structure
+### Kiến trúc & Kỹ thuật
+- [Tài liệu Kiến trúc](docs/ARCHITECTURE.md) - Tổng quan kỹ thuật & chi tiết triển khai
+- [Mục lục Tài liệu](docs/README.md) - Cấu trúc tài liệu hoàn chỉnh
 
-### API Documentation
-- Interactive API Docs: http://localhost:8000/docs (after starting)
+### Tài liệu API
+- Tài liệu API tương tác: http://localhost:8000/docs (sau khi khởi động)
 
-## 🤝 Contributing
+## 🤝 Đóng góp
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes with tests
-4. Run `make format && make lint && make run-tests`
-5. Submit a pull request
+1. Fork repository
+2. Tạo feature branch
+3. Thực hiện thay đổi kèm tests
+4. Chạy `make format && make lint && make run-tests`
+5. Gửi pull request
 
-## 📝 License
+## 📝 Giấy phép
 
 [Your License Here]
 
-## 🙏 Acknowledgments
+## 🙏 Lời cảm ơn
 
-- SSI for market data API access
-- TimescaleDB for time-series optimization
-- FastAPI for the excellent web framework
-- Vietnamese investment community
+- SSI cung cấp API dữ liệu thị trường
+- TimescaleDB cho tối ưu hóa chuỗi thời gian
+- FastAPI cho web framework xuất sắc
+- Cộng đồng đầu tư Việt Nam
 
-## 📧 Support
+## 📧 Hỗ trợ
 
-- Documentation: See [docs/](docs/) folder
+- Tài liệu: Xem thư mục [docs/](docs/)
 - Issues: GitHub Issues
 - Email: your.email@example.com
 
 ---
 
-**Built with ❤️ for Vietnamese quantitative investors**
+**Xây dựng với ❤️ dành cho nhà đầu tư định lượng Việt Nam**
 
-**Version 0.1.0 | Production Ready**
+**Phiên bản 0.1.0 | Sẵn sàng Production**

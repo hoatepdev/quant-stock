@@ -1,133 +1,133 @@
-# Vietnam Quant Platform - Architecture & Technical Documentation
+# Nền tảng Vietnam Quant - Tài liệu Kiến trúc & Kỹ thuật
 
-## Overview
+## Tổng quan
 
-Technical architecture and implementation details of the VNQuant platform - a **production-ready** quantitative investment research and trading platform for the Vietnam stock market. Built with modern Python technologies and designed to analyze ~1,800 stocks across HOSE, HNX, and UPCoM exchanges.
+Kiến trúc kỹ thuật và chi tiết triển khai của nền tảng VNQuant - một nền tảng nghiên cứu đầu tư và giao dịch định lượng **sẵn sàng cho production** cho thị trường chứng khoán Việt Nam. Được xây dựng với công nghệ Python hiện đại và thiết kế để phân tích ~1,800 cổ phiếu trên các sàn HOSE, HNX và UPCoM.
 
-## What Has Been Built
+## Những gì đã được Xây dựng
 
-### ✅ Complete MVP Features
+### ✅ Tính năng MVP Hoàn chỉnh
 
-1. **Data Infrastructure**
+1. **Hạ tầng Dữ liệu**
 
-   - SSI/DNSE/vnstock API client with rate limiting and caching
-   - PostgreSQL + TimescaleDB for time-series optimization
-   - Redis caching layer
-   - Automated data validation
+   - SSI/DNSE/vnstock API client với rate limiting và caching
+   - PostgreSQL + TimescaleDB cho tối ưu hóa chuỗi thời gian
+   - Lớp caching Redis
+   - Xác thực dữ liệu tự động
 
-2. **Factor Calculation Engines**
+2. **Engine Tính toán Chỉ số**
 
-   - **Fundamental Factors**: 20+ ratios (P/E, P/B, ROE, ROA, etc.)
-   - **Technical Indicators**: 15+ indicators (RSI, MACD, Bollinger Bands, etc.)
-   - **Momentum Factors**: 10+ metrics (returns, relative strength, etc.)
+   - **Chỉ số Cơ bản**: 20+ tỷ lệ (P/E, P/B, ROE, ROA, v.v.)
+   - **Chỉ báo Kỹ thuật**: 15+ chỉ báo (RSI, MACD, Bollinger Bands, v.v.)
+   - **Chỉ số Động lượng**: 10+ chỉ số (lợi nhuận, sức mạnh tương đối, v.v.)
 
-3. **Corporate Actions System**
+3. **Hệ thống Sự kiện Doanh nghiệp**
 
-   - Automatic detection of splits and reverse splits
-   - Price adjustment engine
-   - Manual verification workflow
+   - Phát hiện tự động chia tách và chia tách ngược
+   - Engine điều chỉnh giá
+   - Quy trình xác minh thủ công
 
-4. **Stock Screening API**
+4. **API Sàng lọc Cổ phiếu**
 
-   - Multi-factor filtering
-   - Flexible sorting and pagination
-   - Real-time factor queries
-   - RESTful API with OpenAPI documentation
+   - Lọc đa chỉ số
+   - Sắp xếp và phân trang linh hoạt
+   - Truy vấn chỉ số real-time
+   - RESTful API với tài liệu OpenAPI
 
-5. **Database Schema**
+5. **Schema Database**
 
-   - 9 core tables with proper relationships
-   - TimescaleDB hypertables for performance
-   - Comprehensive indexes
-   - Data quality logging
+   - 9 bảng cốt lõi với quan hệ đúng
+   - TimescaleDB hypertable cho hiệu suất
+   - Index toàn diện
+   - Log chất lượng dữ liệu
 
-6. **Testing Framework**
+6. **Framework Testing**
 
-   - Unit tests for core calculations
-   - Integration test structure
-   - > 80% coverage target
+   - Unit test cho tính toán cốt lõi
+   - Cấu trúc integration test
+   - Mục tiêu coverage > 80%
 
-7. **Docker Deployment**
-   - Multi-container setup
-   - Production-ready configuration
-   - Health checks and monitoring
-   - Easy scaling
+7. **Triển khai Docker**
+   - Thiết lập multi-container
+   - Cấu hình sẵn sàng production
+   - Health check và monitoring
+   - Dễ dàng scale
 
-### ✅ Phase 2 Features (COMPLETED)
+### ✅ Tính năng Phase 2 (ĐÃ HOÀN THÀNH)
 
-1. **Corporate Action Adjuster**
+1. **Điều chỉnh Sự kiện Doanh nghiệp**
 
-   - Complete price adjustment engine
-   - Support for splits, reverse splits, dividends, bonus shares
-   - Verify and apply workflow
-   - Recalculate and unapply capabilities
+   - Engine điều chỉnh giá hoàn chỉnh
+   - Hỗ trợ chia tách, chia tách ngược, cổ tức, cổ phiếu thưởng
+   - Quy trình xác minh và áp dụng
+   - Khả năng tính lại và hủy áp dụng
 
-2. **Market Index Tracking**
+2. **Theo dõi Chỉ số Thị trường**
 
-   - Track VN-Index, HNX-Index, UPCoM-Index, VN30, HNX30
-   - Calculate returns, volatility, and statistics
-   - Compare stock performance to indices (alpha)
-   - Index summaries and analytics
+   - Theo dõi VN-Index, HNX-Index, UPCoM-Index, VN30, HNX30
+   - Tính lợi nhuận, biến động và thống kê
+   - So sánh hiệu suất cổ phiếu với chỉ số (alpha)
+   - Tóm tắt và phân tích chỉ số
 
-3. **Backtesting Framework**
+3. **Framework Backtesting**
 
-   - Full backtesting engine with portfolio management
-   - Built-in strategies: MA Crossover, Momentum, Mean Reversion, Buy & Hold
-   - Custom strategy support
-   - Transaction costs and slippage modeling
-   - Comprehensive performance metrics
+   - Engine backtest đầy đủ với quản lý danh mục
+   - Chiến lược có sẵn: MA Crossover, Momentum, Mean Reversion, Buy & Hold
+   - Hỗ trợ chiến lược tùy chỉnh
+   - Mô hình chi phí giao dịch và slippage
+   - Chỉ số hiệu suất toàn diện
 
-4. **Portfolio Optimization**
-   - Modern Portfolio Theory (MPT) implementation
-   - Maximum Sharpe ratio optimization
-   - Minimum volatility portfolios
-   - Target return optimization
-   - Efficient frontier calculation
-   - Multiple weighting schemes
+4. **Tối ưu Danh mục**
+   - Triển khai Lý thuyết Danh mục Hiện đại (MPT)
+   - Tối ưu hóa tỷ lệ Sharpe tối đa
+   - Danh mục biến động tối thiểu
+   - Tối ưu hóa lợi nhuận mục tiêu
+   - Tính toán đường biên hiệu quả
+   - Nhiều phương án phân bổ trọng số
 
-### ✅ Phase 3 Features (COMPLETED)
+### ✅ Tính năng Phase 3 (ĐÃ HOÀN THÀNH)
 
-1. **Machine Learning Price Predictor**
+1. **Dự đoán Giá Machine Learning**
 
-   - Random Forest, Gradient Boosting, Linear Regression models
-   - Automatic feature engineering (20+ technical indicators)
-   - Training/testing with performance metrics (R², RMSE, MAE)
-   - Feature importance analysis
-   - Multi-stock prediction support
+   - Mô hình Random Forest, Gradient Boosting, Linear Regression
+   - Feature engineering tự động (20+ chỉ báo kỹ thuật)
+   - Huấn luyện/kiểm tra với chỉ số hiệu suất (R², RMSE, MAE)
+   - Phân tích tầm quan trọng feature
+   - Hỗ trợ dự đoán đa cổ phiếu
 
-2. **Sentiment Analysis Engine**
+2. **Engine Phân tích Cảm xúc**
 
-   - Vietnamese language sentiment analysis
-   - News headline analysis and aggregation
-   - Trading signal generation (BUY/SELL/HOLD)
-   - Sentiment momentum tracking
-   - Multi-source news support (VietStock, CafeF)
+   - Phân tích cảm xúc tiếng Việt
+   - Phân tích và tổng hợp tiêu đề tin tức
+   - Tạo tín hiệu giao dịch (MUA/BÁN/GIỮ)
+   - Theo dõi động lực cảm xúc
+   - Hỗ trợ đa nguồn tin (VietStock, CafeF)
 
-3. **Real-time Data Feed**
+3. **Feed Dữ liệu Real-time**
 
-   - WebSocket-ready price feed infrastructure
-   - Price alert system (above/below/change%)
-   - OHLC bar aggregation
-   - Subscription management
-   - Callback system for custom handling
+   - Hạ tầng price feed sẵn sàng WebSocket
+   - Hệ thống cảnh báo giá (trên/dưới/thay đổi%)
+   - Tổng hợp thanh OHLC
+   - Quản lý đăng ký
+   - Hệ thống callback cho xử lý tùy chỉnh
 
-4. **Advanced Screening Strategies**
+4. **Chiến lược Sàng lọc Nâng cao**
 
-   - Value investing strategy
-   - Growth investing strategy
-   - Momentum strategy
-   - Quality strategy
-   - Dividend strategy
+   - Chiến lược đầu tư giá trị
+   - Chiến lược đầu tư tăng trưởng
+   - Chiến lược động lượng
+   - Chiến lược chất lượng
+   - Chiến lược cổ tức
 
-5. **Performance Analytics**
-   - Total & annualized returns
-   - Volatility and Sharpe ratio
-   - Maximum drawdown analysis
-   - Beta and Alpha calculation
-   - Rolling metrics
-   - Comparative analysis
+5. **Phân tích Hiệu suất**
+   - Lợi nhuận tổng & hàng năm
+   - Biến động và tỷ lệ Sharpe
+   - Phân tích drawdown tối đa
+   - Tính toán Beta và Alpha
+   - Chỉ số trượt
+   - Phân tích so sánh
 
-## File Structure (85+ Files Created)
+## Cấu trúc File (85+ File đã tạo)
 
 ```
 vnquant/

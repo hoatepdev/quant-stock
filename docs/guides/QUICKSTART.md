@@ -1,96 +1,96 @@
-# Quick Start Guide
+# Hướng dẫn Khởi động Nhanh
 
-Get the Vietnam Quant Platform up and running in 10 minutes!
+Khởi chạy Nền tảng Vietnam Quant chỉ trong 10 phút!
 
-## Prerequisites Checklist
+## Danh sách Kiểm tra Yêu cầu
 
-- [x] Docker and Docker Compose installed
-- [x] 4GB+ RAM available
-- [x] 20GB+ disk space
-- [ ] SSI API credentials (OPTIONAL - only if using SSI as data source)
+- [x] Đã cài đặt Docker và Docker Compose
+- [x] Có sẵn 4GB+ RAM
+- [x] Có sẵn 20GB+ dung lượng đĩa
+- [ ] Thông tin đăng nhập SSI API (TÙY CHỌN - chỉ cần nếu dùng SSI làm nguồn dữ liệu)
 
-## 5-Step Setup
+## Cài đặt 5 Bước
 
-### 1. Configure Environment (2 minutes)
+### 1. Cấu hình Môi trường (2 phút)
 
 ```bash
-# Copy environment template
+# Sao chép template môi trường
 cp .env.example .env
 
-# Edit with your credentials
+# Chỉnh sửa với thông tin của bạn
 nano .env
 ```
 
-**Minimum required settings:**
+**Cài đặt tối thiểu cần thiết:**
 
 ```env
-# Database (can keep defaults for development)
+# Database (có thể giữ mặc định cho development)
 DB_PASSWORD=postgres
 
-# Data Source (vnstock is default and FREE - no API key needed!)
+# Nguồn dữ liệu (vnstock là mặc định và MIỄN PHÍ - không cần API key!)
 DATA_SOURCE=vnstock
 
 # Application
 ENVIRONMENT=development
 LOG_LEVEL=INFO
 
-# Optional: Only needed if you want to use SSI instead of vnstock
+# Tùy chọn: Chỉ cần nếu muốn sử dụng SSI thay vì vnstock
 # SSI_API_KEY=your_actual_key_here
 # SSI_SECRET_KEY=your_actual_secret_here
 ```
 
-**Note:** The platform now uses **vnstock** as the default data source, which is:
-- ✅ **FREE** - No API registration or keys required
-- ✅ **FAST** - Better performance than SSI
-- ✅ **RELIABLE** - Built-in corporate action adjustments
-- ✅ **COMPLETE** - Covers HOSE, HNX, and UPCoM exchanges
+**Lưu ý:** Nền tảng hiện sử dụng **vnstock** làm nguồn dữ liệu mặc định, với các ưu điểm:
+- ✅ **MIỄN PHÍ** - Không cần đăng ký API hay key
+- ✅ **NHANH** - Hiệu suất tốt hơn SSI
+- ✅ **ỔN ĐỊNH** - Điều chỉnh sự kiện doanh nghiệp tự động
+- ✅ **TOÀN DIỆN** - Bao gồm các sàn HOSE, HNX và UPCoM
 
-You can optionally switch to SSI by setting `DATA_SOURCE=ssi` in `.env`
+Bạn có thể tùy chọn chuyển sang SSI bằng cách đặt `DATA_SOURCE=ssi` trong `.env`
 
-### 2. Start Services (2 minutes)
+### 2. Khởi động Dịch vụ (2 phút)
 
 ```bash
-# Build and start all services
+# Build và khởi động tất cả dịch vụ
 make docker-up
 
-# Wait for services to be ready (~30 seconds)
-# Check status
+# Đợi các dịch vụ sẵn sàng (~30 giây)
+# Kiểm tra trạng thái
 make docker-ps
 ```
 
-### 3. Initialize Database (1 minute)
+### 3. Khởi tạo Database (1 phút)
 
 ```bash
-# Create tables and indexes
+# Tạo bảng và indexes
 make init-db
 ```
 
-### 4. Verify Installation (1 minute)
+### 4. Xác minh Cài đặt (1 phút)
 
 ```bash
-# Check API health
+# Kiểm tra API health
 curl http://localhost:8000/api/v1/health
 
-# Access API documentation
+# Truy cập tài liệu API
 open http://localhost:8000/docs
 ```
 
-### 5. Load Sample Data (Optional - 5 minutes)
+### 5. Tải Dữ liệu Mẫu (Tùy chọn - 5 phút)
 
 ```bash
-# Quick test with a few stocks
+# Test nhanh với một vài cổ phiếu
 python scripts/backfill_data.py --tickers VNM,HPG,VIC --start-date 2024-01-01
 ```
 
-## Test Your Setup
+## Kiểm tra Cài đặt
 
-### Test 1: Get Available Tickers
+### Test 1: Lấy danh sách Mã cổ phiếu
 
 ```bash
 curl http://localhost:8000/api/v1/tickers | jq
 ```
 
-### Test 2: Screen Stocks
+### Test 2: Sàng lọc Cổ phiếu
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/screen \
@@ -103,99 +103,99 @@ curl -X POST http://localhost:8000/api/v1/screen \
   }' | jq
 ```
 
-### Test 3: Get Stock Factors
+### Test 3: Lấy Chỉ số Cổ phiếu
 
 ```bash
 curl http://localhost:8000/api/v1/factors/VNM | jq
 ```
 
-## Common Issues & Solutions
+## Các vấn đề Thường gặp & Giải pháp
 
-### Issue: Docker containers won't start
+### Vấn đề: Docker containers không khởi động
 
-**Solution:**
+**Giải pháp:**
 
 ```bash
-# Check Docker is running
+# Kiểm tra Docker đang chạy
 docker ps
 
-# If not, start Docker Desktop
-# Then retry
+# Nếu không, khởi động Docker Desktop
+# Sau đó thử lại
 make docker-down
 make docker-up
 ```
 
-### Issue: "Connection refused" errors
+### Vấn đề: Lỗi "Connection refused"
 
-**Solution:**
+**Giải pháp:**
 
 ```bash
-# Wait for services to fully start (can take 30-60 seconds)
+# Đợi dịch vụ khởi động hoàn toàn (có thể mất 30-60 giây)
 sleep 30
 
-# Check logs
+# Kiểm tra logs
 make docker-logs
 ```
 
-### Issue: No data returned from API
+### Vấn đề: API không trả về dữ liệu
 
-**Solution:**
+**Giải pháp:**
 
 ```bash
-# Make sure database is initialized
+# Đảm bảo database đã được khởi tạo
 make init-db
 
-# Load some data
+# Tải một số dữ liệu
 python scripts/backfill_data.py --tickers VNM --start-date 2024-01-01
 ```
 
-### Issue: Data source errors
+### Vấn đề: Lỗi nguồn dữ liệu
 
-**Solution:**
+**Giải pháp:**
 
-**If using vnstock (default):**
-- No API keys needed
-- Check internet connection
-- Verify vnstock is installed: `pip install vnstock==0.3.2`
+**Nếu dùng vnstock (mặc định):**
+- Không cần API key
+- Kiểm tra kết nối internet
+- Xác minh vnstock đã cài đặt: `pip install vnstock==0.3.2`
 
-**If using SSI:**
-1. Verify your API credentials are correct in `.env`
-2. Check you have API access enabled on SSI iBoard
-3. Ensure you haven't exceeded rate limits (100 requests/minute)
-4. Set `DATA_SOURCE=ssi` in `.env`
+**Nếu dùng SSI:**
+1. Xác minh thông tin đăng nhập API đúng trong `.env`
+2. Kiểm tra bạn đã bật API access trên SSI iBoard
+3. Đảm bảo không vượt quá rate limit (100 requests/phút)
+4. Đặt `DATA_SOURCE=ssi` trong `.env`
 
-## Next Steps
+## Bước tiếp theo
 
-Once everything is running:
+Khi mọi thứ đã chạy:
 
-1. **Load More Data** - Run full backfill:
+1. **Tải thêm Dữ liệu** - Chạy backfill đầy đủ:
 
    ```bash
    make backfill-data
    ```
 
-   ⚠️ This takes 1-2 hours for all stocks
+   ⚠️ Mất khoảng 1-2 giờ cho tất cả cổ phiếu
 
-2. **Explore the API** - Visit http://localhost:8000/docs
+2. **Khám phá API** - Truy cập http://localhost:8000/docs
 
-   - Try different screening criteria
-   - Get factor history
-   - Test filtering and sorting
+   - Thử các tiêu chí sàng lọc khác nhau
+   - Lấy lịch sử chỉ số
+   - Test lọc và sắp xếp
 
-3. **Set Up Daily Updates** - Add to cron:
+3. **Thiết lập Cập nhật Hàng ngày** - Thêm vào cron:
 
    ```bash
    0 18 * * 1-5 cd /path/to/vnquant && python scripts/run_daily_update.py
    ```
 
-4. **Read Full Documentation**:
-   - [README.md](README.md) - Feature overview
-   - [docs/SETUP.md](docs/SETUP.md) - Detailed setup guide
-   - [docs/API.md](docs/API.md) - API documentation
+4. **Đọc Tài liệu Đầy đủ**:
+   - [README.md](README.md) - Tổng quan tính năng
+   - [docs/SETUP.md](docs/SETUP.md) - Hướng dẫn cài đặt chi tiết
+   - [docs/API.md](docs/API.md) - Tài liệu API
 
-## Development Workflow
+## Quy trình Phát triển
 
-### Run Tests
+### Chạy Tests
 
 ```bash
 make run-tests
@@ -207,88 +207,88 @@ make run-tests
 make format
 ```
 
-### View Logs
+### Xem Logs
 
 ```bash
-# All services
+# Tất cả dịch vụ
 make docker-logs
 
-# Specific service
+# Dịch vụ cụ thể
 docker logs vietnam_quant_api -f
 ```
 
-### Stop Services
+### Dừng Dịch vụ
 
 ```bash
 make docker-down
 ```
 
-### Access Database
+### Truy cập Database
 
 ```bash
-# Using psql
+# Dùng psql
 docker exec -it vietnam_quant_db psql -U postgres -d vietnam_quant
 
-# Or use pgAdmin at http://localhost:5050
-# (if running with dev profile: docker-compose --profile dev up)
+# Hoặc dùng pgAdmin tại http://localhost:5050
+# (nếu chạy với dev profile: docker-compose --profile dev up)
 ```
 
-## Production Checklist
+## Danh sách Kiểm tra Production
 
-Before deploying to production:
+Trước khi triển khai production:
 
-- [ ] Change all default passwords in `.env`
-- [ ] Set `ENVIRONMENT=production`
-- [ ] Set `DEBUG=false`
-- [ ] Configure HTTPS/SSL
-- [ ] Set up automated backups
-- [ ] Configure monitoring
-- [ ] Review and adjust rate limits
-- [ ] Set up log aggregation
-- [ ] Configure firewall rules
-- [ ] Test disaster recovery procedures
+- [ ] Thay đổi tất cả mật khẩu mặc định trong `.env`
+- [ ] Đặt `ENVIRONMENT=production`
+- [ ] Đặt `DEBUG=false`
+- [ ] Cấu hình HTTPS/SSL
+- [ ] Thiết lập backup tự động
+- [ ] Cấu hình monitoring
+- [ ] Xem xét và điều chỉnh rate limits
+- [ ] Thiết lập tổng hợp log
+- [ ] Cấu hình firewall rules
+- [ ] Test quy trình khôi phục thảm họa
 
-## Getting Help
+## Nhận Trợ giúp
 
-**Documentation:**
+**Tài liệu:**
 
-- README.md - Overview and features
-- docs/SETUP.md - Detailed setup instructions
-- docs/API.md - API reference
-- docs/ARCHITECTURE.md - System architecture
+- README.md - Tổng quan và tính năng
+- docs/SETUP.md - Hướng dẫn cài đặt chi tiết
+- docs/API.md - Tham chiếu API
+- docs/ARCHITECTURE.md - Kiến trúc hệ thống
 
-**Support:**
+**Hỗ trợ:**
 
-- GitHub Issues: Report bugs and request features
-- Logs: Check `logs/app.log` and `logs/error.log`
+- GitHub Issues: Báo cáo lỗi và yêu cầu tính năng
+- Logs: Kiểm tra `logs/app.log` và `logs/error.log`
 - Docker logs: `make docker-logs`
 
-## Quick Reference
+## Tham chiếu Nhanh
 
-### Makefile Commands
+### Các lệnh Makefile
 
 ```bash
-make help              # Show all available commands
-make docker-up         # Start services
-make docker-down       # Stop services
-make docker-logs       # View logs
-make init-db           # Initialize database
-make backfill-data     # Load historical data
-make run-tests         # Run tests
+make help              # Hiển thị tất cả lệnh có sẵn
+make docker-up         # Khởi động dịch vụ
+make docker-down       # Dừng dịch vụ
+make docker-logs       # Xem logs
+make init-db           # Khởi tạo database
+make backfill-data     # Tải dữ liệu lịch sử
+make run-tests         # Chạy tests
 make format            # Format code
-make lint              # Run linters
-make clean             # Clean temporary files
+make lint              # Chạy linters
+make clean             # Dọn dẹp file tạm
 ```
 
 ### API Endpoints
 
-- `GET /api/v1/health` - Health check
-- `GET /api/v1/tickers` - List tickers
-- `POST /api/v1/screen` - Screen stocks
-- `GET /api/v1/factors/{ticker}` - Get stock factors
-- `GET /api/v1/factors/available` - List available factors
+- `GET /api/v1/health` - Kiểm tra health
+- `GET /api/v1/tickers` - Danh sách mã CP
+- `POST /api/v1/screen` - Sàng lọc cổ phiếu
+- `GET /api/v1/factors/{ticker}` - Lấy chỉ số cổ phiếu
+- `GET /api/v1/factors/available` - Danh sách chỉ số có sẵn
 
-### Default Ports
+### Ports Mặc định
 
 - API: http://localhost:8000
 - PostgreSQL: localhost:5432
@@ -297,6 +297,6 @@ make clean             # Clean temporary files
 
 ---
 
-**You're all set!** 🚀
+**Hoàn tất!** 🚀
 
-Start exploring Vietnamese stocks with quantitative analysis!
+Bắt đầu khám phá cổ phiếu Việt Nam với phân tích định lượng!

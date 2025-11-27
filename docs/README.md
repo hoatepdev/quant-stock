@@ -1,141 +1,141 @@
-# Documentation
+# Tài liệu
 
-Welcome to the Vietnam Quant Platform documentation!
+Chào mừng đến với tài liệu Nền tảng Vietnam Quant!
 
-## 📖 Table of Contents
+## 📖 Mục lục
 
-### Getting Started
+### Bắt đầu
 
-#### Quick Start & Setup
+#### Khởi động Nhanh & Cài đặt
 
-- [Quick Start Guide](guides/QUICKSTART.md) - Get up and running in 10 minutes
-- [Detailed Setup Guide](guides/SETUP.md) - Comprehensive installation and configuration
-- [VNStock Integration](guides/VNSTOCK_INTEGRATION.md) - Free data source setup (no API keys required)
-- [Quant Trading Guide (Vietnamese)](guides/HUONG_DAN_QUANT_TRADING.md) - Complete guide for quantitative trading workflow
-- [Stock Screening Guide](STOCK_SCREENING_GUIDE.md) - Comprehensive guide for stock screening with multiple strategies
+- [Hướng dẫn Khởi động Nhanh](guides/QUICKSTART.md) - Bắt đầu trong 10 phút
+- [Hướng dẫn Cài đặt Chi tiết](guides/SETUP.md) - Cài đặt và cấu hình toàn diện
+- [Tích hợp VNStock](guides/VNSTOCK_INTEGRATION.md) - Thiết lập nguồn dữ liệu miễn phí (không cần API key)
+- [Hướng dẫn Quant Trading](guides/HUONG_DAN_QUANT_TRADING.md) - Hướng dẫn đầy đủ quy trình giao dịch định lượng
+- [Hướng dẫn Sàng lọc Cổ phiếu](STOCK_SCREENING_GUIDE.md) - Hướng dẫn toàn diện về sàng lọc cổ phiếu với nhiều chiến lược
 
-### Phase Documentation
+### Tài liệu các Phase
 
-#### Implementation Phases
+#### Các Phase Triển khai
 
-- [Phase 2 - Backtesting & Portfolio](phases/PHASE2.md) - Backtesting framework, portfolio optimization, corporate actions
-- [Phase 3 - ML & Analytics](phases/PHASE3.md) - Machine learning, sentiment analysis, real-time feeds
-- [Phase 4 - Trading System](phases/PHASE4.md) - Broker integration, risk management, order management
+- [Phase 2 - Backtesting & Danh mục](phases/PHASE2.md) - Framework backtest, tối ưu danh mục, sự kiện doanh nghiệp
+- [Phase 3 - ML & Phân tích](phases/PHASE3.md) - Machine learning, phân tích cảm xúc, dữ liệu real-time
+- [Phase 4 - Hệ thống Giao dịch](phases/PHASE4.md) - Tích hợp broker, quản lý rủi ro, quản lý lệnh
 
-### Backtesting & Trading
+### Backtesting & Giao dịch
 
-- [Backtest Complete Guide](BACKTEST_COMPLETE_GUIDE.md) - Comprehensive backtesting guide (quickstart + reference + advanced)
-- [Backtest Upgrades](BACKTEST_UPGRADES.md) - Technical details on realistic execution & risk metrics
-- [Screening Improvements](SCREENING_IMPROVEMENTS.md) - Latest screening system improvements
+- [Hướng dẫn Backtest Toàn diện](BACKTEST_COMPLETE_GUIDE.md) - Hướng dẫn backtest đầy đủ (khởi động + tham chiếu + nâng cao)
+- [Nâng cấp Backtest](BACKTEST_UPGRADES.md) - Chi tiết kỹ thuật về thực thi thực tế & chỉ số rủi ro
+- [Cải tiến Sàng lọc](SCREENING_IMPROVEMENTS.md) - Các cải tiến mới nhất của hệ thống sàng lọc
 
-### Architecture & Overview
+### Kiến trúc & Tổng quan
 
-- [Architecture Documentation](ARCHITECTURE.md) - Technical overview & implementation details
-- [Main README](../README.md) - Platform introduction and quick reference
+- [Tài liệu Kiến trúc](ARCHITECTURE.md) - Tổng quan kỹ thuật & chi tiết triển khai
+- [README Chính](../README.md) - Giới thiệu nền tảng và tham chiếu nhanh
 
-## 🗂️ Documentation Structure
+## 🗂️ Cấu trúc Tài liệu
 
 ```
 docs/
-├── README.md (this file)
+├── README.md (file này)
 ├── guides/
-│   ├── QUICKSTART.md                    # 10-minute setup guide
-│   ├── SETUP.md                         # Detailed installation guide
-│   ├── VNSTOCK_INTEGRATION.md           # VNStock data source guide
-│   └── HUONG_DAN_QUANT_TRADING.md      # Complete quant trading guide (Vietnamese)
+│   ├── QUICKSTART.md                    # Hướng dẫn cài đặt 10 phút
+│   ├── SETUP.md                         # Hướng dẫn cài đặt chi tiết
+│   ├── VNSTOCK_INTEGRATION.md           # Hướng dẫn nguồn dữ liệu VNStock
+│   └── HUONG_DAN_QUANT_TRADING.md      # Hướng dẫn quant trading đầy đủ
 └── phases/
-    ├── PHASE2.md              # Backtesting & portfolio optimization
-    ├── PHASE3.md              # ML, sentiment, real-time features
-    └── PHASE4.md              # Trading system & risk management
+    ├── PHASE2.md              # Backtesting & tối ưu danh mục
+    ├── PHASE3.md              # ML, sentiment, tính năng real-time
+    └── PHASE4.md              # Hệ thống giao dịch & quản lý rủi ro
 ```
 
-## 🚀 Where to Start?
+## 🚀 Bắt đầu từ đâu?
 
-1. **New Users**: Start with [Quick Start Guide](guides/QUICKSTART.md)
-2. **Quant Trading**: Read [Quant Trading Guide (Vietnamese)](guides/HUONG_DAN_QUANT_TRADING.md) for complete workflow
-3. **Detailed Setup**: Read [Setup Guide](guides/SETUP.md)
-4. **Data Source**: Configure [VNStock](guides/VNSTOCK_INTEGRATION.md)
-5. **Backtesting**: Explore [Phase 2 Guide](phases/PHASE2.md)
-6. **ML & AI**: Check out [Phase 3 Guide](phases/PHASE3.md)
-7. **Trading**: Learn [Phase 4 Guide](phases/PHASE4.md)
+1. **Người dùng mới**: Bắt đầu với [Hướng dẫn Khởi động Nhanh](guides/QUICKSTART.md)
+2. **Quant Trading**: Đọc [Hướng dẫn Quant Trading](guides/HUONG_DAN_QUANT_TRADING.md) để có quy trình đầy đủ
+3. **Cài đặt Chi tiết**: Đọc [Hướng dẫn Cài đặt](guides/SETUP.md)
+4. **Nguồn Dữ liệu**: Cấu hình [VNStock](guides/VNSTOCK_INTEGRATION.md)
+5. **Backtesting**: Khám phá [Hướng dẫn Phase 2](phases/PHASE2.md)
+6. **ML & AI**: Xem [Hướng dẫn Phase 3](phases/PHASE3.md)
+7. **Giao dịch**: Học [Hướng dẫn Phase 4](phases/PHASE4.md)
 
-## 📋 Quick Links
+## 📋 Liên kết Nhanh
 
-### Phase Documentation
+### Tài liệu các Phase
 
-- [Phase 2 - Backtesting & Portfolio](phases/PHASE2.md) ✅
-- [Phase 3 - ML & Analytics](phases/PHASE3.md) ✅
-- [Phase 4 - Trading System](phases/PHASE4.md) ✅
+- [Phase 2 - Backtesting & Danh mục](phases/PHASE2.md) ✅
+- [Phase 3 - ML & Phân tích](phases/PHASE3.md) ✅
+- [Phase 4 - Hệ thống Giao dịch](phases/PHASE4.md) ✅
 
-### API Documentation
+### Tài liệu API
 
-- Interactive Swagger UI: http://localhost:8000/docs
+- Swagger UI tương tác: http://localhost:8000/docs
 - ReDoc: http://localhost:8000/redoc
 
-## 🔍 Documentation by Feature
+## 🔍 Tài liệu theo Tính năng
 
-### Data Infrastructure
+### Hạ tầng Dữ liệu
 
-- [Quick Start - Step 5: Load Sample Data](guides/QUICKSTART.md#5-load-sample-data-optional---5-minutes)
-- [VNStock Integration Guide](guides/VNSTOCK_INTEGRATION.md)
+- [Khởi động Nhanh - Bước 5: Tải Dữ liệu Mẫu](guides/QUICKSTART.md#5-load-sample-data-optional---5-minutes)
+- [Hướng dẫn Tích hợp VNStock](guides/VNSTOCK_INTEGRATION.md)
 
-### Stock Screening
+### Sàng lọc Cổ phiếu
 
-- [Stock Screening Guide](STOCK_SCREENING_GUIDE.md) - Complete screening documentation
-- [Predefined Strategies](STOCK_SCREENING_GUIDE.md#2-sàng-lọc-theo-chiến-lược-có-sẵn) - Value, Growth, Quality, Momentum, Dividend
-- [Custom Screening](STOCK_SCREENING_GUIDE.md#3-custom-screening-sàng-lọc-tùy-chỉnh) - Build your own filters
+- [Hướng dẫn Sàng lọc Cổ phiếu](STOCK_SCREENING_GUIDE.md) - Tài liệu sàng lọc đầy đủ
+- [Chiến lược Có sẵn](STOCK_SCREENING_GUIDE.md#2-sàng-lọc-theo-chiến-lược-có-sẵn) - Value, Growth, Quality, Momentum, Dividend
+- [Sàng lọc Tùy chỉnh](STOCK_SCREENING_GUIDE.md#3-custom-screening-sàng-lọc-tùy-chỉnh) - Xây dựng bộ lọc riêng
 
 ### Backtesting
 
-- [Backtest Complete Guide](BACKTEST_COMPLETE_GUIDE.md) - Comprehensive guide with quickstart and advanced features
-- [Phase 2 - Backtesting Framework](phases/PHASE2.md#3-backtesting-framework)
-- [Built-in Strategies](phases/PHASE2.md#built-in-strategies)
+- [Hướng dẫn Backtest Toàn diện](BACKTEST_COMPLETE_GUIDE.md) - Hướng dẫn đầy đủ với khởi động và tính năng nâng cao
+- [Phase 2 - Framework Backtesting](phases/PHASE2.md#3-backtesting-framework)
+- [Chiến lược Có sẵn](phases/PHASE2.md#built-in-strategies)
 
-### Portfolio Optimization
+### Tối ưu Danh mục
 
-- [Phase 2 - Portfolio Optimization](phases/PHASE2.md#4-portfolio-optimization)
-- [Optimization Methods](phases/PHASE2.md#optimization-methods)
+- [Phase 2 - Tối ưu Danh mục](phases/PHASE2.md#4-portfolio-optimization)
+- [Phương pháp Tối ưu](phases/PHASE2.md#optimization-methods)
 
 ### Machine Learning
 
 - [Phase 3 - ML Predictor](phases/PHASE3.md#1-machine-learning-models-)
-- [Model Training & Evaluation](phases/PHASE3.md#example-usage)
+- [Huấn luyện & Đánh giá Mô hình](phases/PHASE3.md#example-usage)
 
-### Sentiment Analysis
+### Phân tích Cảm xúc
 
-- [Phase 3 - Sentiment Analysis](phases/PHASE3.md#2-sentiment-analysis-)
-- [Vietnamese Language Support](phases/PHASE3.md#2-sentiment-analysis)
+- [Phase 3 - Phân tích Cảm xúc](phases/PHASE3.md#2-sentiment-analysis-)
+- [Hỗ trợ Tiếng Việt](phases/PHASE3.md#2-sentiment-analysis)
 
-### Real-time Data
+### Dữ liệu Real-time
 
-- [Phase 3 - Real-time Feed](phases/PHASE3.md#3-real-time-data-feed-)
-- [Price Alerts](phases/PHASE3.md#example-usage)
+- [Phase 3 - Feed Real-time](phases/PHASE3.md#3-real-time-data-feed-)
+- [Cảnh báo Giá](phases/PHASE3.md#example-usage)
 
-### Trading System
+### Hệ thống Giao dịch
 
-- [Phase 4 Guide](phases/PHASE4.md) - Detailed documentation
-- [Broker Integration](phases/PHASE4.md#1-broker-integration-framework)
-- [Risk Management](phases/PHASE4.md#2-risk-management-system)
-- [Order Management](phases/PHASE4.md#3-order-management-system)
-- [Position Tracking](phases/PHASE4.md#4-position-tracking)
+- [Hướng dẫn Phase 4](phases/PHASE4.md) - Tài liệu chi tiết
+- [Tích hợp Broker](phases/PHASE4.md#1-broker-integration-framework)
+- [Quản lý Rủi ro](phases/PHASE4.md#2-risk-management-system)
+- [Quản lý Lệnh](phases/PHASE4.md#3-order-management-system)
+- [Theo dõi Vị thế](phases/PHASE4.md#4-position-tracking)
 
-## 💡 Tips
+## 💡 Mẹo
 
-- Use the search function in your editor to find specific topics
-- All code examples are tested and ready to use
-- Check the [Architecture Documentation](ARCHITECTURE.md) for technical details
-- See demo scripts in `scripts/` directory for working examples
+- Sử dụng chức năng tìm kiếm trong editor để tìm chủ đề cụ thể
+- Tất cả ví dụ code đã được kiểm tra và sẵn sàng sử dụng
+- Xem [Tài liệu Kiến trúc](ARCHITECTURE.md) để biết chi tiết kỹ thuật
+- Xem các demo script trong thư mục `scripts/` để có ví dụ hoạt động
 
-## 🤝 Contributing to Docs
+## 🤝 Đóng góp Tài liệu
 
-When adding documentation:
+Khi thêm tài liệu:
 
-1. Place setup/tutorial guides in `guides/`
-2. Place phase-specific docs in `phases/`
-3. Update this README with new links
-4. Keep examples concise and runnable
-5. Include links to source code
+1. Đặt hướng dẫn cài đặt/tutorial trong `guides/`
+2. Đặt tài liệu theo phase trong `phases/`
+3. Cập nhật README này với link mới
+4. Giữ ví dụ ngắn gọn và có thể chạy được
+5. Bao gồm link đến source code
 
 ---
 
-**Need help?** Check the troubleshooting sections in each guide or review the main [README](../README.md).
+**Cần trợ giúp?** Kiểm tra phần troubleshooting trong từng hướng dẫn hoặc xem lại [README chính](../README.md).
