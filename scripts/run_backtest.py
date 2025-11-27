@@ -53,7 +53,9 @@ class BacktestRunner:
         initial_capital: float = 100_000_000,
         commission_rate: float = 0.0015,
         start_date: Optional[date] = None,
-        end_date: Optional[date] = None
+        end_date: Optional[date] = None,
+        use_slippage: bool = True,
+        use_dynamic_sizing: bool = True
     ):
         """
         Khởi tạo BacktestRunner.
@@ -63,18 +65,23 @@ class BacktestRunner:
             commission_rate: Phí giao dịch (%)
             start_date: Ngày bắt đầu backtest
             end_date: Ngày kết thúc backtest
+            use_slippage: Bật slippage model (realistic execution)
+            use_dynamic_sizing: Bật dynamic position sizing (liquidity-based)
         """
         self.db = next(get_sync_session())
         self.engine = BacktestEngine(
             self.db,
             initial_capital=Decimal(str(initial_capital)),
-            commission_rate=commission_rate
+            commission_rate=commission_rate,
+            use_slippage=use_slippage,
+            use_dynamic_sizing=use_dynamic_sizing
         )
 
         self.end_date = end_date or date.today()
         self.start_date = start_date or (self.end_date - timedelta(days=365))
 
-        logger.info(f"BacktestRunner initialized: {self.start_date} to {self.end_date}")
+        mode = "realistic" if (use_slippage and use_dynamic_sizing) else "baseline"
+        logger.info(f"BacktestRunner initialized: {self.start_date} to {self.end_date} (mode: {mode})")
 
     def run_single_strategy(
         self,
@@ -576,6 +583,19 @@ Ví dụ sử dụng:
         help="Phí giao dịch (%%/100). Mặc định: 0.0015 (0.15%%)"
     )
 
+    # Realistic execution features
+    parser.add_argument(
+        "--no-slippage",
+        action="store_true",
+        help="Tắt slippage model (baseline mode). Mặc định: bật"
+    )
+
+    parser.add_argument(
+        "--no-dynamic-sizing",
+        action="store_true",
+        help="Tắt dynamic position sizing (baseline mode). Mặc định: bật"
+    )
+
     # Strategy parameters - MA
     parser.add_argument(
         "--short-window",
@@ -673,7 +693,9 @@ Ví dụ sử dụng:
         initial_capital=args.capital,
         commission_rate=args.commission,
         start_date=start_date,
-        end_date=end_date
+        end_date=end_date,
+        use_slippage=not args.no_slippage,
+        use_dynamic_sizing=not args.no_dynamic_sizing
     )
 
     try:

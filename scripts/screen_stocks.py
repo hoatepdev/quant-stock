@@ -127,6 +127,18 @@ def cli():
     help="Maximum number of results per strategy",
 )
 @click.option(
+    "--min-market-cap",
+    type=float,
+    default=1.0,
+    help="Minimum market cap in trillion VND (default: 1T VND)",
+)
+@click.option(
+    "--min-volume",
+    type=int,
+    default=100_000,
+    help="Minimum average daily volume (default: 100K shares)",
+)
+@click.option(
     "--export",
     type=str,
     default=None,
@@ -136,6 +148,8 @@ def strategy(
     strategy: str,
     exchange: Optional[str],
     limit: int,
+    min_market_cap: float,
+    min_volume: int,
     export: Optional[str],
 ) -> None:
     """Screen stocks using predefined strategies.
@@ -152,14 +166,20 @@ def strategy(
         python scripts/screen_stocks.py strategy --strategy=value
         python scripts/screen_stocks.py strategy --strategy=growth --exchange=HOSE
         python scripts/screen_stocks.py strategy --strategy=all --limit=10
+        python scripts/screen_stocks.py strategy --strategy=value --min-market-cap=5 --min-volume=500000
     """
     db = next(get_sync_session())
     screener = AdvancedScreener(db)
+
+    # Convert market cap from trillion to VND
+    min_market_cap_vnd = min_market_cap * 1_000_000_000_000
 
     try:
         if strategy == "all":
             results = screener.screen_all_strategies(
                 exchange=exchange,
+                min_market_cap=min_market_cap_vnd,
+                min_avg_volume=min_volume,
                 limit_per_strategy=limit,
             )
 
@@ -178,15 +198,35 @@ def strategy(
         else:
             # Run single strategy
             if strategy == "value":
-                stocks = screener.screen_value_stocks(exchange=exchange, limit=limit)
+                stocks = screener.screen_value_stocks(
+                    exchange=exchange,
+                    min_market_cap=min_market_cap_vnd,
+                    min_avg_volume=min_volume,
+                    limit=limit,
+                )
             elif strategy == "growth":
-                stocks = screener.screen_growth_stocks(exchange=exchange, limit=limit)
+                stocks = screener.screen_growth_stocks(
+                    exchange=exchange,
+                    min_market_cap=min_market_cap_vnd,
+                    min_avg_volume=min_volume,
+                    limit=limit,
+                )
             elif strategy == "momentum":
                 stocks = screener.screen_momentum_stocks(exchange=exchange, limit=limit)
             elif strategy == "quality":
-                stocks = screener.screen_quality_stocks(exchange=exchange, limit=limit)
+                stocks = screener.screen_quality_stocks(
+                    exchange=exchange,
+                    min_market_cap=min_market_cap_vnd,
+                    min_avg_volume=min_volume,
+                    limit=limit,
+                )
             elif strategy == "dividend":
-                stocks = screener.screen_dividend_stocks(exchange=exchange, limit=limit)
+                stocks = screener.screen_dividend_stocks(
+                    exchange=exchange,
+                    min_market_cap=min_market_cap_vnd,
+                    min_avg_volume=min_volume,
+                    limit=limit,
+                )
 
             display_results(stocks, f"=== {strategy.upper()} STRATEGY ===")
 

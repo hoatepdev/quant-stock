@@ -22,6 +22,12 @@ Welcome to the Vietnam Quant Platform documentation!
 - [Phase 3 - ML & Analytics](phases/PHASE3.md) - Machine learning, sentiment analysis, real-time feeds
 - [Phase 4 - Trading System](phases/PHASE4.md) - Broker integration, risk management, order management
 
+### Backtesting & Trading
+
+- [Backtest Complete Guide](BACKTEST_COMPLETE_GUIDE.md) - Comprehensive backtesting guide (quickstart + reference + advanced)
+- [Backtest Upgrades](BACKTEST_UPGRADES.md) - Technical details on realistic execution & risk metrics
+- [Screening Improvements](SCREENING_IMPROVEMENTS.md) - Latest screening system improvements
+
 ### Architecture & Overview
 
 - [Architecture Documentation](ARCHITECTURE.md) - Technical overview & implementation details
@@ -81,6 +87,7 @@ docs/
 
 ### Backtesting
 
+- [Backtest Complete Guide](BACKTEST_COMPLETE_GUIDE.md) - Comprehensive guide with quickstart and advanced features
 - [Phase 2 - Backtesting Framework](phases/PHASE2.md#3-backtesting-framework)
 - [Built-in Strategies](phases/PHASE2.md#built-in-strategies)
 

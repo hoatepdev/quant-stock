@@ -30,11 +30,14 @@ help:
 	@echo "  make screen-stats     Show database statistics"
 	@echo ""
 	@echo "Backtesting:"
-	@echo "  make backtest-ma      Backtest Moving Average strategy"
-	@echo "  make backtest-momentum Backtest Momentum strategy"
-	@echo "  make backtest-compare Compare all strategies"
-	@echo "  make backtest-demo    Run backtest demo"
-	@echo "  make backtest-custom  Run custom strategy examples"
+	@echo "  make backtest-ma            Backtest Moving Average strategy"
+	@echo "  make backtest-momentum      Backtest Momentum strategy"
+	@echo "  make backtest-compare       Compare all strategies"
+	@echo "  make backtest-realistic     Run with realistic execution (default)"
+	@echo "  make backtest-baseline      Run baseline (no slippage/sizing)"
+	@echo "  make backtest-test-slippage Compare realistic vs baseline"
+	@echo "  make backtest-demo          Run backtest demo"
+	@echo "  make backtest-custom        Run custom strategy examples"
 	@echo ""
 	@echo "Docker:"
 	@echo "  make docker-build     Build Docker images"
@@ -196,6 +199,18 @@ backtest-custom:
 	@echo "Running custom strategy examples..."
 	$(PYTHON) examples/custom_strategy_example.py
 
+backtest-realistic:
+	@echo "Running backtest with realistic execution (slippage + dynamic sizing)..."
+	$(PYTHON) scripts/run_backtest.py --strategy buy_hold --tickers VHC,PVT --start-date 2024-01-01
+
+backtest-baseline:
+	@echo "Running baseline backtest (no slippage, no dynamic sizing)..."
+	$(PYTHON) scripts/run_backtest.py --strategy buy_hold --tickers VHC,PVT --start-date 2024-01-01 --no-slippage --no-dynamic-sizing
+
+backtest-test-slippage:
+	@echo "Testing slippage impact..."
+	$(PYTHON) test_slippage_comparison.py
+
 backtest-help:
 	@echo "Backtest Commands Usage:"
 	@echo ""
@@ -220,5 +235,6 @@ backtest-help:
 	@echo "  python scripts/run_backtest.py --help"
 	@echo ""
 	@echo "Documentation:"
-	@echo "  docs/BACKTEST_GUIDE.md        Complete backtest guide"
+	@echo "  docs/BACKTEST_COMPLETE_GUIDE.md  Complete backtest guide (quickstart + reference + advanced)"
+	@echo "  docs/BACKTEST_UPGRADES.md        Technical details on realistic execution"
 	@echo "  examples/custom_strategy_example.py  Custom strategy examples"

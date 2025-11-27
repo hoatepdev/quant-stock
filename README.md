@@ -166,6 +166,10 @@ See [Phase Completion Docs](docs/phases/) for details.
 - [VNStock Integration](docs/guides/VNSTOCK_INTEGRATION.md) - Free data source setup
 - [Quant Trading Guide (Vietnamese)](docs/guides/HUONG_DAN_QUANT_TRADING.md) - Complete trading workflow
 
+### Backtesting & Trading
+- [Backtest Complete Guide](docs/BACKTEST_COMPLETE_GUIDE.md) - Comprehensive backtesting guide (quickstart + reference + advanced features)
+- [Backtest Upgrades](docs/BACKTEST_UPGRADES.md) - Technical details on realistic execution & risk metrics
+
 ### Phase Documentation
 - [Phase 2 Guide](docs/phases/PHASE2.md) - Backtesting & portfolio optimization
 - [Phase 3 Guide](docs/phases/PHASE3.md) - ML & sentiment analysis
@@ -173,6 +177,7 @@ See [Phase Completion Docs](docs/phases/) for details.
 
 ### Stock Screening
 - [Stock Screening Guide](docs/STOCK_SCREENING_GUIDE.md) - Comprehensive screening documentation
+- [Screening Improvements](docs/SCREENING_IMPROVEMENTS.md) - Latest improvements to screening system
 
 ### Architecture & Technical
 - [Architecture Documentation](docs/ARCHITECTURE.md) - Technical overview & implementation details

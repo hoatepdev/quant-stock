@@ -1,15 +1,87 @@
-"""Backtesting engine for trading strategies."""
+"""Backtesting engine for trading strategies with advanced risk management."""
 from datetime import date, timedelta
 from decimal import Decimal
 from typing import Dict, List, Optional, Callable
+import math
 
 import pandas as pd
+import numpy as np
 from sqlalchemy.orm import Session
 
 from src.database.models import DailyPrice
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
+
+
+class SlippageModel:
+    """Model slippage based on volume and position size."""
+
+    @staticmethod
+    def calculate_slippage(
+        price: Decimal,
+        volume: int,
+        shares: int,
+        impact_coefficient: float = 0.1
+    ) -> Decimal:
+        """Calculate realistic slippage.
+
+        Args:
+            price: Market price
+            volume: Daily volume
+            shares: Number of shares to trade
+            impact_coefficient: Market impact coefficient (0-1)
+
+        Returns:
+            Slippage amount (added to buy, subtracted from sell)
+        """
+        if volume == 0:
+            # High slippage if no volume data
+            return price * Decimal("0.005")  # 0.5% slippage
+
+        # Calculate percentage of daily volume
+        volume_percentage = shares / volume if volume > 0 else 1.0
+
+        # Slippage increases with volume percentage (square root for realism)
+        slippage_pct = min(impact_coefficient * math.sqrt(volume_percentage), 0.05)  # Cap at 5%
+
+        return price * Decimal(str(slippage_pct))
+
+
+class PositionSizer:
+    """Dynamic position sizing based on liquidity and risk."""
+
+    @staticmethod
+    def calculate_shares(
+        available_capital: Decimal,
+        price: Decimal,
+        daily_volume: int,
+        max_pct_of_volume: float = 0.05,  # Max 5% of daily volume
+        max_pct_of_capital: float = 0.2,  # Max 20% of capital per position
+    ) -> int:
+        """Calculate optimal position size.
+
+        Args:
+            available_capital: Available cash
+            price: Stock price
+            daily_volume: Average daily volume
+            max_pct_of_volume: Max percentage of daily volume (default: 5%)
+            max_pct_of_capital: Max percentage of capital (default: 20%)
+
+        Returns:
+            Number of shares to buy
+        """
+        # Capital-based limit
+        capital_limit = available_capital * Decimal(str(max_pct_of_capital))
+        max_shares_capital = int(capital_limit / price) if price > 0 else 0
+
+        # Volume-based limit (for liquidity)
+        max_shares_volume = int(daily_volume * max_pct_of_volume)
+
+        # Take the minimum to ensure both constraints
+        shares = min(max_shares_capital, max_shares_volume)
+
+        return max(shares, 0)  # Ensure non-negative
 
 
 class Position:
@@ -217,7 +289,7 @@ class Portfolio:
         return total
 
     def get_statistics(self) -> Dict:
-        """Get portfolio performance statistics.
+        """Get portfolio performance statistics including risk metrics.
 
         Returns:
             Dictionary of statistics
@@ -232,6 +304,9 @@ class Portfolio:
                 "avg_pnl": 0.0,
                 "avg_win": 0.0,
                 "avg_loss": 0.0,
+                "max_drawdown": 0.0,
+                "sharpe_ratio": 0.0,
+                "sortino_ratio": 0.0,
             }
 
         winning = [p for p in self.closed_positions if p.pnl and p.pnl > 0]
@@ -242,6 +317,9 @@ class Portfolio:
 
         avg_win = sum(p.pnl for p in winning) / len(winning) if winning else Decimal(0)
         avg_loss = sum(p.pnl for p in losing) / len(losing) if losing else Decimal(0)
+
+        # Calculate risk metrics from equity curve
+        max_dd, sharpe, sortino = self._calculate_risk_metrics()
 
         return {
             "total_trades": len(self.closed_positions),
@@ -254,7 +332,54 @@ class Portfolio:
             "avg_win": float(avg_win),
             "avg_loss": float(avg_loss),
             "profit_factor": float(abs(avg_win / avg_loss)) if avg_loss != 0 else 0,
+            "max_drawdown": max_dd,
+            "sharpe_ratio": sharpe,
+            "sortino_ratio": sortino,
         }
+
+    def _calculate_risk_metrics(self) -> tuple:
+        """Calculate risk-adjusted performance metrics.
+
+        Returns:
+            Tuple of (max_drawdown, sharpe_ratio, sortino_ratio)
+        """
+        if len(self.equity_curve) < 2:
+            return 0.0, 0.0, 0.0
+
+        values = [point["value"] for point in self.equity_curve]
+
+        # Maximum Drawdown
+        peak = values[0]
+        max_dd = 0.0
+        for value in values:
+            if value > peak:
+                peak = value
+            dd = (peak - value) / peak if peak > 0 else 0
+            max_dd = max(max_dd, dd)
+
+        # Calculate daily returns
+        returns = []
+        for i in range(1, len(values)):
+            ret = (values[i] - values[i-1]) / values[i-1] if values[i-1] > 0 else 0
+            returns.append(ret)
+
+        if not returns:
+            return max_dd, 0.0, 0.0
+
+        # Sharpe Ratio (assume risk-free rate = 0 for simplicity)
+        mean_return = np.mean(returns)
+        std_return = np.std(returns)
+        sharpe = (mean_return / std_return * np.sqrt(252)) if std_return > 0 else 0
+
+        # Sortino Ratio (only penalize downside volatility)
+        downside_returns = [r for r in returns if r < 0]
+        if downside_returns:
+            downside_std = np.std(downside_returns)
+            sortino = (mean_return / downside_std * np.sqrt(252)) if downside_std > 0 else 0
+        else:
+            sortino = sharpe  # No downside = same as Sharpe
+
+        return float(max_dd), float(sharpe), float(sortino)
 
 
 class BacktestEngine:
@@ -265,6 +390,8 @@ class BacktestEngine:
         db: Session,
         initial_capital: Decimal = Decimal("100000000"),  # 100M VND
         commission_rate: float = 0.0015,
+        use_slippage: bool = True,
+        use_dynamic_sizing: bool = True,
     ):
         """Initialize backtest engine.
 
@@ -272,11 +399,17 @@ class BacktestEngine:
             db: Database session
             initial_capital: Starting capital
             commission_rate: Commission rate
+            use_slippage: Enable slippage model for realistic execution
+            use_dynamic_sizing: Enable dynamic position sizing based on liquidity
         """
         self.db = db
         self.initial_capital = initial_capital
         self.commission_rate = commission_rate
+        self.use_slippage = use_slippage
+        self.use_dynamic_sizing = use_dynamic_sizing
         self.portfolio: Optional[Portfolio] = None
+        self.slippage_model = SlippageModel()
+        self.position_sizer = PositionSizer()
 
     def run(
         self,
@@ -366,15 +499,19 @@ class BacktestEngine:
         trading_days = sorted(df.index.unique())
 
         for trading_day in trading_days:
-            # Get current prices
+            # Get current prices and volumes
             current_prices = {}
+            volumes = {}
             for ticker in tickers:
                 try:
                     price = df.loc[trading_day, ("close", ticker)]
+                    volume = df.loc[trading_day, ("volume", ticker)]
                     # Skip if price is NaN or None
                     if pd.isna(price):
                         continue
                     current_prices[ticker] = Decimal(str(price))
+                    # Handle volume - default to 0 if NaN
+                    volumes[ticker] = int(volume) if not pd.isna(volume) else 0
                 except Exception:
                     continue
 
@@ -383,7 +520,7 @@ class BacktestEngine:
 
             # Execute trades based on signals
             if signals:
-                self._execute_signals(signals, trading_day, current_prices)
+                self._execute_signals(signals, trading_day, current_prices, volumes)
 
             # Record portfolio value
             portfolio_value = self.portfolio.get_total_value(current_prices)
@@ -491,27 +628,64 @@ class BacktestEngine:
         signals: Dict[str, str],
         trade_date: date,
         current_prices: Dict[str, Decimal],
+        volumes: Dict[str, int] = None,
     ) -> None:
-        """Execute trading signals.
+        """Execute trading signals with slippage and dynamic sizing.
 
         Args:
             signals: Dictionary of ticker -> signal (BUY, SELL, HOLD)
             trade_date: Trade date
             current_prices: Current prices dictionary
+            volumes: Dictionary of ticker -> volume (for position sizing)
         """
+        volumes = volumes or {}
+
         for ticker, signal in signals.items():
             if ticker not in current_prices:
                 continue
 
-            price = current_prices[ticker]
+            base_price = current_prices[ticker]
+            volume = volumes.get(ticker, 0)
 
             if signal == "BUY":
-                # Use 10% of available cash per position
-                position_size = self.portfolio.cash * Decimal("0.1")
-                shares = int(position_size / price)
+                # Calculate position size
+                if self.use_dynamic_sizing and volume > 0:
+                    shares = self.position_sizer.calculate_shares(
+                        self.portfolio.cash,
+                        base_price,
+                        volume,
+                        max_pct_of_volume=0.05,  # Max 5% of daily volume
+                        max_pct_of_capital=0.2,  # Max 20% per position
+                    )
+                else:
+                    # Fallback: 10% of available cash
+                    position_size = self.portfolio.cash * Decimal("0.1")
+                    shares = int(position_size / base_price) if base_price > 0 else 0
 
                 if shares > 0:
-                    self.portfolio.buy(ticker, trade_date, price, shares)
+                    # Apply slippage
+                    if self.use_slippage:
+                        slippage = self.slippage_model.calculate_slippage(
+                            base_price, volume, shares
+                        )
+                        execution_price = base_price + slippage
+                    else:
+                        execution_price = base_price
+
+                    self.portfolio.buy(ticker, trade_date, execution_price, shares)
 
             elif signal == "SELL":
-                self.portfolio.sell(ticker, trade_date, price)
+                # Apply slippage to sell
+                if self.use_slippage:
+                    position = next((p for p in self.portfolio.positions if p.ticker == ticker), None)
+                    if position:
+                        slippage = self.slippage_model.calculate_slippage(
+                            base_price, volume, position.shares
+                        )
+                        execution_price = base_price - slippage  # Subtract for sell
+                    else:
+                        execution_price = base_price
+                else:
+                    execution_price = base_price
+
+                self.portfolio.sell(ticker, trade_date, execution_price)

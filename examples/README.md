@@ -79,8 +79,7 @@ def my_custom_strategy(data, portfolio, current_prices):
 
 ## 📚 Tài Liệu Tham Khảo
 
-- [Backtest Guide](../docs/BACKTEST_GUIDE.md) - Hướng dẫn đầy đủ về backtest
-- [Quick Start](../BACKTEST_QUICKSTART.md) - Bắt đầu nhanh trong 5 phút
+- [Backtest Complete Guide](../docs/BACKTEST_COMPLETE_GUIDE.md) - Hướng dẫn hoàn chỉnh về backtest (bao gồm quickstart và advanced features)
 - [Quant Trading Guide](../docs/guides/HUONG_DAN_QUANT_TRADING.md) - Workflow đầy đủ
 
 ## 💡 Tips

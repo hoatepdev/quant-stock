@@ -22,7 +22,9 @@
       "Bash(cp:*)",
       "Bash(python scripts/run_backtest.py:*)",
       "Bash(python:*)",
-      "Bash(timeout 60 python:*)"
+      "Bash(timeout 60 python:*)",
+      "Bash(timeout 90 python:*)",
+      "Bash(make backtest-realistic:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
